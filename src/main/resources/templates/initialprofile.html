@@ -6,21 +6,53 @@
 <title>Strongerweb - Initial Profile</title>
 </head>
 <body>
-<h1>Here's a start.</h1>
-<h2>If you know better, adjust!</h2>
-<div class="slider" th:object="${humanAbilities}">
+<h1>Here's your routine.</h1>
+<ul><li id="keep-routine" class="style-as-link" onclick="hideElements('slider')">Looks good</li><li id="adjust-routine" class="style-as-link" onclick="showElements('slider')">I need to adjust</li></ul>
+<div id="initial-routine" th:object="${humanAbilities}">
+	<button class="adjust-routine-save" type="button">save</button><br />
 	<th:block th:each="activity, iterstat : *{activityList}">
-		<label th:for="'activity-' + iterstat.index"><span th:text="${activity.getName()}"></span></label>
-		<br /><input type="range" step="5" class="weight-slider" th:id="'activity-' + ${iterstat.index}" th:oninput="'displaySliderNumbers(\'activity-' + ${iterstat.index} + '\', \'current-weight\', \'currentWeightFor\')'" th:min="${(activity.getCurrentWorkingWeight() % 2) gt 0 ? activity.getCurrentWorkingWeight() / 2 + 3 : activity.getCurrentWorkingWeight() / 2} " th:max="${activity.getCurrentWorkingWeight() * 2}" th:value="${activity.getCurrentWorkingWeight()}" />
+		<label th:for="'activity-' + ${iterstat.index}"><span th:text="${activity.getName()}"></span></label>
+		
+		<br /><input type="range" onclick="showElements('adjust-routine-save')" step="5" class="slider weight-slider" th:id="'activity-' + ${iterstat.index}" th:oninput="'displaySliderNumbers(\'activity-' + ${iterstat.index} + '\', \'current-weight\', \'currentWeightFor\')'" th:min="${(activity.getCurrentWorkingWeight() % 2) gt 0 ? activity.getCurrentWorkingWeight() / 2 + 3 : activity.getCurrentWorkingWeight() / 2} " th:max="${activity.getCurrentWorkingWeight() * 2}" th:value="${activity.getCurrentWorkingWeight()}" />
 		<span class="current-weight" th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" th:text="${activity.getCurrentWorkingWeight()}"></span>
-	     <br /><input type="range" step="1" class="rep-slider" th:id="'reps-activity-' + ${iterstat.index}"  th:oninput="'displaySliderNumbers(\'reps-activity-' + ${iterstat.index} + '\', \'current-reps\', \'currentRepsFor\')'" th:min="1" th:max="15" th:value="${activity.getCurrentReps()}" />
+	    
+	     <br /><input type="range" onclick="showElements('adjust-routine-save')" step="1" class="slider rep-slider" th:id="'reps-activity-' + ${iterstat.index}"  th:oninput="'displaySliderNumbers(\'reps-activity-' + ${iterstat.index} + '\', \'current-reps\', \'currentRepsFor\')'" th:min="1" th:max="15" th:value="${activity.getCurrentReps()}" />
 		<span class="current-reps" th:attr = "data-current-reps-for = 'reps-activity-' + ${iterstat.index}" th:text="${activity.getCurrentReps()}"></span>
+	 	
+	 	<br /><input type="range" onclick="showElements('adjust-routine-save')" step="1" class="slider set-slider" th:id="'sets-activity-' + ${iterstat.index}"  th:oninput="'displaySliderNumbers(\'sets-activity-' + ${iterstat.index} + '\', \'current-sets\', \'currentSetsFor\')'" th:min="1" th:max="5" th:value="${activity.getCurrentSets()}" />
+		<span class="current-sets" th:attr = "data-current-sets-for = 'sets-activity-' + ${iterstat.index}" th:text="${activity.getCurrentSets()}"></span>
+	 	
 	 	<br />
 		<br />
 	</th:block>
+	<button class="adjust-routine-save" type="button">save</button>
 
 	<script th:inline="javascript">
-	/*<![CDATA[*/
+	/*<![CDATA[*/   
+	   var showElementWithId = function(idName) {
+			var element = document.getElementById(idName);
+			element.style.display = "inline-block";
+		}
+	
+	   var hideElementWithId = function(idName) {
+			var element = document.getElementById(idName);
+			elements.style.display = "none";
+		}
+	
+	    var showElements = function(className) {
+			var elements = document.getElementsByClassName(className);
+			for(var i = 0; i < elements.length; i++) {
+				elements[i].style.display = "inline-block";
+			}
+		}
+	
+	    var hideElements = function(className) {
+			var elements = document.getElementsByClassName(className);
+			for(var i = 0; i < elements.length; i++) {
+				elements[i].style.display = "none";
+			}
+		}
+	           
 		var displaySliderNumbers = function(elementId, className, dataElementName) {
 			var sliderElement = document.getElementById(elementId);
 			var currentElements = document.getElementsByClassName(className);

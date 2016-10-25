@@ -9,6 +9,7 @@ class Exercise {
 	int currentMax
 	int currentReps = 8
 	int currentWorkingWeight
+	int currentSets = 2
 	
 	void setCurrentWorkingWeight(int currentReps) {
 		this.currentReps = currentReps
