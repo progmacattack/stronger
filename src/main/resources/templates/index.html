@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<title>Stronger, starting now</title>
+</head>
+<body>
+<h1>Ready? You are ready. Let's go.</h1>
+<p>
+Current registered users:
+</p>
+<table>
+	<tr>
+		<td>Username</td>
+		<td>Name</td>
+		<td>Email</td>
+	</tr>
+	<tr th:each="userAccount : ${userAccounts}">
+		<td><span th:text="${userAccount.username}" /></td>
+		<td><span th:text="${userAccount.name}" /></td>
+		<td><span th:text="${userAccount.email}" /></td>
+	</tr>
+</table>
+
+</body>
+</html>

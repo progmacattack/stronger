@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" type="text/css" th:href="@{css/main.css}" />
+<title>Strongerweb</title>
+</head>
+<body>
+	<h1>Welcome</h1>
+	<h2>Let's get started.</h2>
+	<form action="#" id="initial-data-form" th:action="@{/createprofile}"
+		method="post">
+		<p>
+			<label>I weigh</label><input type="number"
+				th:field="*{human.weightInPounds}" name="weightInPounds" /> pounds<br />
+			<span th:each="err : ${#fields.errors('human.weightInPounds')}" th:text="${err}" th:class="error-message"></span>
+		</p>
+		<p>
+			I am a <label for="male">Man</label><input th:field="*{human.sex}"
+				type="radio" value="MALE" name="MALE" />
+				<label for="woman">Woman</label><input
+				th:field="*{human.sex}" type="radio" value="FEMALE" name="FEMALE" />
+				<span th:each="err : ${#fields.errors('human.sex')}" th:utext="${err}" th:class="error-message"></span>
+		</p>
+		<p>
+			<button type="submit">Submit</button>
+		</p>
+	</form>
+	<br />
+	<br />
+	<p>
+		<a href="newuser">Create account</a>
+	</p>
+	<br />
+	<h3>Current users:</h3>
+	<th:block th:each="row : ${userAccounts}">
+		<span th:text="${row.username}"></span>
+		<br />
+
+	</th:block>
+
+</body>
+</html>
