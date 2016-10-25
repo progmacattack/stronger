@@ -37,3 +37,31 @@ input[name=submit] {
 	clear:left;
 	margin-left: 130px;
 }
+
+#initial-routine > input.slider {
+	display: none;
+}
+
+#initial-routine > input + .current-reps::after {
+	content: ' repetitions';
+}
+
+#initial-routine > input + .current-weight::after {
+	content: ' pounds';
+}
+
+#initial-routine > input + .current-sets::after {
+	content: ' sets';
+}
+
+#initial-routine button.adjust-routine-save {
+	display:none;
+}
+
+ul > li.style-as-link {
+	text-decoration: underline;
+	color: darkblue;
+	cursor: pointer;
+	list-style: none;
+}
+
