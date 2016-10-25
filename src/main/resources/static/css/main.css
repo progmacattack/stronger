@@ -1,0 +1,39 @@
+@CHARSET "UTF-8";
+body {
+	color: #333333;
+	font-family: Trebuchet MS, Lucida Grande, Lucida Sans Unicode, Lucida Sans, Tahoma, sans-serif;
+}
+
+.newUserForm {
+}
+
+label {
+	display:inline-block;
+}
+
+h1 {
+	margin-bottom: 0px;
+}
+
+h2 {
+	margin-top: 3px;
+	color: #777;
+	font-weight:normal;
+}
+
+.error-message {
+	color: red;
+	font-size: small;
+}
+
+input[type=text] {
+	display:inline-block;
+	margin-left: 3px;
+	margin-right: 3px;
+	width: 60px;
+}
+
+input[name=submit] {
+	clear:left;
+	margin-left: 130px;
+}

@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1" />
+<link rel="stylesheet" th:href="@{css/main.css}" type="text/css" />
+<title>Strongerweb - Initial Profile</title>
+</head>
+<body>
+<h1>Here's a start.</h1>
+<h2>If you know better, adjust!</h2>
+<div class="slider" th:object="${humanAbilities}">
+	<th:block th:each="activity, iterstat : *{activityList}">
+		<label th:for="'activity-' + iterstat.index"><span th:text="${activity.getName()}"></span></label>
+		<br /><input type="range" step="5" class="weight-slider" th:id="'activity-' + ${iterstat.index}" th:oninput="'displaySliderNumbers(\'activity-' + ${iterstat.index} + '\', \'current-weight\', \'currentWeightFor\')'" th:min="${(activity.getCurrentWorkingWeight() % 2) gt 0 ? activity.getCurrentWorkingWeight() / 2 + 3 : activity.getCurrentWorkingWeight() / 2} " th:max="${activity.getCurrentWorkingWeight() * 2}" th:value="${activity.getCurrentWorkingWeight()}" />
+		<span class="current-weight" th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" th:text="${activity.getCurrentWorkingWeight()}"></span>
+	     <br /><input type="range" step="1" class="rep-slider" th:id="'reps-activity-' + ${iterstat.index}"  th:oninput="'displaySliderNumbers(\'reps-activity-' + ${iterstat.index} + '\', \'current-reps\', \'currentRepsFor\')'" th:min="1" th:max="15" th:value="${activity.getCurrentReps()}" />
+		<span class="current-reps" th:attr = "data-current-reps-for = 'reps-activity-' + ${iterstat.index}" th:text="${activity.getCurrentReps()}"></span>
+	 	<br />
+		<br />
+	</th:block>
+
+	<script th:inline="javascript">
+	/*<![CDATA[*/
+		var displaySliderNumbers = function(elementId, className, dataElementName) {
+			var sliderElement = document.getElementById(elementId);
+			var currentElements = document.getElementsByClassName(className);
+			for(var i = 0; i < currentElements.length; i++) {
+				if (currentElements[i].dataset[dataElementName] == elementId) {
+					currentElements[i].textContent = sliderElement.value;
+				}
+			}			
+		}
+		
+	/*]]>*/
+	</script>
+</div>
+</body>
+</html>
