@@ -1,0 +1,16 @@
+<nav>
+	<th:block th:with="username=${#httpServletRequest.remoteUser}">
+		<strong th:inline="text" th:if="${username} != null">Welcome, [[${username}]]</strong>
+		<ul>
+			<li><a href="/">Home</a></li>
+			<li>
+				<a th:href="@{/login}" th:if="${username} == null">Login</a>
+				<form th:action="@{/logout}" th:if="${username} != null" method="post">
+            		<input type="submit" value="Sign Out"/>
+       			</form>
+			</li>
+			<li>Nav link 2</li>
+			<li>Nav link 3</li>
+		</ul>
+	</th:block>
+</nav>

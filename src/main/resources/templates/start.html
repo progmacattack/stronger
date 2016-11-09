@@ -6,6 +6,7 @@
 <title>Strongerweb</title>
 </head>
 <body>
+<article th:fragment="start">
 	<h1>Welcome</h1>
 	<h2>Let's get started.</h2>
 	<form action="#" id="initial-data-form" th:action="@{/createprofile}"
@@ -29,7 +30,7 @@
 	<br />
 	<br />
 	<p>
-		<a href="newuser">Create account</a>
+		<a href="joinus">Join us</a>
 	</p>
 	<br />
 	<h3>Current users:</h3>
@@ -38,6 +39,6 @@
 		<br />
 
 	</th:block>
-
+</article>
 </body>
 </html>

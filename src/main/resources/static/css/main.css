@@ -22,8 +22,10 @@ h2 {
 }
 
 .error-message {
+	display: block;
 	color: red;
 	font-size: small;
+	margin-bottom: 3px;
 }
 
 input[type=text] {

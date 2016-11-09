@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1" />
+<link rel="stylesheet" th:href="@{css/main.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{css/flexgrid.css}" type="text/css" />
+<title>Stronger, starting now: Join us</title>
+</head>
+<body>
+	<th:block th:replace="fragments/header"></th:block>
+	<div id="main">
+		<th:block th:replace="fragments/navigation"></th:block>
+		<article>
+			<form class="newUserForm" th:object="${userAccount}" method="POST" action="#" >
+			<label>Username:</label> <input name="username" type="text" /><br />
+			<span class="error-message" th:errors="*{username}">Error placeholder</span>
+			<label>Set password:</label><input name="password" type="text" /><br />
+			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+			<input name="submit" value="Begin" type="submit" />
+			</form>
+			<p><a href="#">Assign random username and password and login</a></p>
+		</article>
+		<aside th:include="fragments/currentusers"></aside>
+	</div>
+</body>
+</html>

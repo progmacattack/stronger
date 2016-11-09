@@ -1,0 +1,37 @@
+@CHARSET "ISO-8859-1";
+
+#main {
+	display: flex;
+	flex-flow: row;
+}
+
+header, footer {
+	display: block;
+	padding: 5px;
+}
+
+#main > nav {
+	padding: 5px;
+	flex: 2;
+	order: 1;
+}
+
+#main > article {
+	padding: 5px;
+	flex: 6;
+	order: 2;
+}
+
+#main > aside {
+	padding: 5px;
+	flex: 2;
+	order: 3; 
+}
+
+.flex-grid {
+	display: flex;
+}
+
+.flex-grid .col {
+	flex: 1;
+}

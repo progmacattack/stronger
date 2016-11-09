@@ -9,7 +9,6 @@ import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.UserAccount
 import com.strongerstartingnow.dao.UserAccountDao
 
-
 @Controller
 class HomeController {
 	

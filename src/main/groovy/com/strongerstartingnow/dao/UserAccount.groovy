@@ -1,10 +1,14 @@
 package com.strongerstartingnow.dao
 import groovy.transform.Canonical
+import org.springframework.stereotype.Component
+import com.strongerstartingnow.validators.ValidUsername
 @Canonical
+@Component
 class UserAccount {
-	def id
-	def username
+	@ValidUsername
+	String username
 	def name
 	def password
-	def email	
+	def email
+	boolean enabled = true
 }
