@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1" />
+<link rel="stylesheet" th:href="@{css/main.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{css/flexgrid.css}" type="text/css" />
+<title>Stronger, starting now</title>
+</head>
+<body>
+	<th:block th:replace="fragments/header"></th:block>
+	<div id="main">
+		<th:block th:replace="fragments/navigation"></th:block>
+		<article th:include="fragments/login">
+		</article>
+		<aside>Some other text specific to the login page</aside>
+	</div>
+</body>
+</html>
