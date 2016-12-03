@@ -29,16 +29,27 @@ class UserAccountDao {
 	UserAccountRoleDao userAccountRoleDao
 	
 	Boolean create(UserAccount userAccount) {
-		String sql = "insert into useraccount (username, name, email, password, enabled) values (?,?,?,?,?)"
+		String sql = "insert into useraccount (username, name, email, password, enabled, useraccount_role_id) values (?,?,?,?,?,?)"
 		String hashedPass = encryptPassword.encode(userAccount.password)
 		userAccount.password = hashedPass
-		def params = [userAccount.username, userAccount.name, userAccount.email, userAccount.password, userAccount.enabled]
 		
-		println "passing in params: $params"
-		Boolean created = userAccountRoleDao.create(userAccount, UserAccountRole.RoleEnum.ROLE_USER)
+		UserAccountRole createdUserAccountRole = userAccountRoleDao.create(userAccount, UserAccountRole.RoleEnum.ROLE_USER)
+		println "created role is: " + createdUserAccountRole.toString();
+		userAccount.userAccountRole = createdUserAccountRole;
 		
-		//update returns number of rows affected
-		return created && this.jdbcTemplate.update(sql, userAccount.username, userAccount.name, userAccount.email, userAccount.password, userAccount.enabled) > 0
+		//try to create user account
+		try {
+			Boolean userAccountCreated = this.jdbcTemplate
+				.update(sql, userAccount.username, userAccount.name, userAccount.email, userAccount.password,
+					userAccount.enabled, userAccount.userAccountRole.id) > 0;
+		} catch(Exception e) {
+			//delete role if there was a problem creating user account and return false
+			userAccountRoleDao.delete(userAccount);
+			return false;
+		}
+		
+		//returns true if user has been created
+		return true;
 	}
 	
 	Boolean userExists(UserAccount userAccount) {
@@ -106,7 +117,7 @@ class UserAccountDao {
 					userAccount.setEmail(rs.getString("email"))
 					userAccount.setPassword(rs.getString("password"))
 					userAccount.setEnabled(rs.getBoolean("enabled"))
-					println "check it out: ${userAccount.name}"
+					println "check it out: ${userAccount.username}"
 					return userAccount;
 				}
 			})

@@ -3,6 +3,7 @@ import com.mysql.jdbc.PreparedStatement;
 import com.strongerstartingnow.dao.UserAccountRole.RoleEnum
 import java.sql.ResultSet
 import java.sql.SQLException
+import groovy.sql.Sql
 
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.dao.EmptyResultDataAccessException;
@@ -22,11 +23,22 @@ class UserAccountRoleDao {
 		this.jdbcTemplate = jdbcTemplate
 	}
 	
-	Boolean create(UserAccount userAccount, RoleEnum roleEnum) {
+	UserAccountRole create(UserAccount userAccount, RoleEnum roleEnum) {
 		def sql = "insert into useraccount_role(username, role) values (?,?)"
 		def params = [userAccount.username, roleEnum.sqlValue] as Object[]
 		//update returns number of rows affected
-		return this.jdbcTemplate.update(sql, params) > 0
+		if(this.jdbcTemplate.update(sql, params) > 0) {
+			String sqlStmnt = "select * from useraccount_role where username = ?"
+			def param = [userAccount.username] as Object[]
+			return this.jdbcTemplate.queryForObject(sqlStmnt, param, new RowMapper<UserAccountRole>() {
+				UserAccountRole mapRow(ResultSet rs, int row) throws SQLException {
+					UserAccountRole uar = new UserAccountRole([id: rs.getString("id"), username: rs.getString("username"), roleEnum: rs.getString("role") as RoleEnum ])
+				}
+			});
+		} else {
+		  return new UserAccountRole();
+		};
+		
 	}
 	
 	Boolean delete(UserAccount userAccount) {

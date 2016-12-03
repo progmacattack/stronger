@@ -11,4 +11,5 @@ class UserAccount {
 	def password
 	def email
 	boolean enabled = true
+	UserAccountRole userAccountRole
 }

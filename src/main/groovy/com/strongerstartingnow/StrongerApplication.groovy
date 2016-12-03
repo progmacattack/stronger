@@ -1,6 +1,5 @@
 package com.strongerstartingnow
 
-import com.strongerstartingnow.session.ActiveUserStore
 import javax.sql.DataSource
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
@@ -14,11 +13,6 @@ class StrongerApplication {
 
 	static void main(String[] args) {
 		SpringApplication.run StrongerApplication, args
-	}
-	
-	@Bean
-	ActiveUserStore activeUserStore(){
-		return new ActiveUserStore()
 	}
 
 }
