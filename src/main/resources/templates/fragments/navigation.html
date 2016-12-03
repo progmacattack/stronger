@@ -9,7 +9,9 @@
             		<input type="submit" value="Sign Out"/>
        			</form>
 			</li>
-			<li>Nav link 2</li>
+			<li>
+				<a th:href="@{/joinus}" th:if="${username} == null">Join</a>
+			</li>
 			<li>Nav link 3</li>
 		</ul>
 	</th:block>

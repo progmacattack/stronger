@@ -2,8 +2,8 @@
 <html>
 <head>
 <meta charset="ISO-8859-1" />
-<link rel="stylesheet" th:href="@{css/main.css}" type="text/css" />
-<link rel="stylesheet" th:href="@{css/flexgrid.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/main.css}" type="text/css" />
+<link rel="stylesheet" th:href="@{/css/flexgrid.css}" type="text/css" />
 <title>Stronger, starting now: Join us</title>
 </head>
 <body>
@@ -11,7 +11,8 @@
 	<div id="main">
 		<th:block th:replace="fragments/navigation"></th:block>
 		<article>
-			You are now among us. Enjoy.
+			<strong><th:block th:text="${credentials.username} + ','"></th:block></strong> you are now among us. Enjoy.
+			<p th:if="${credentials.password != null}">Your password is <strong><span th:text="${credentials.password}"></span>.</strong> might want to write this down, you won't see it in plain text again.</p>
 		</article>
 		<aside>Some other text here</aside>
 	</div>

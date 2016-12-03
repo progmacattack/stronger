@@ -12,15 +12,16 @@
 		<th:block th:replace="fragments/navigation"></th:block>
 		<article>
 			<form class="newUserForm" th:object="${userAccount}" method="POST" action="#" >
-			<label>Username:</label> <input name="username" type="text" /><br />
+			<label>Choose Username:</label> <input name="username" type="text" /><br />
 			<span class="error-message" th:errors="*{username}">Error placeholder</span>
 			<label>Set password:</label><input name="password" type="text" /><br />
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			<input name="submit" value="Begin" type="submit" />
 			</form>
-			<p><a href="#">Assign random username and password and login</a></p>
+			<p><a th:href="@{joinus/random}" rel="nofollow">Assign random username and password and login</a></p>
+			<p><th:block th:text="${randomUsername}"></th:block></p>
 		</article>
-		<aside th:include="fragments/currentusers"></aside>
+		<aside>Something here</aside>
 	</div>
 </body>
 </html>

@@ -9,6 +9,8 @@ import groovy.transform.Canonical;
 public class UserAccountRole {
 	def id
 	String username
+	RoleEnum roleEnum
+	
 	enum RoleEnum {
 		ROLE_USER("ROLE_USER"),
 		ROLE_ADMIN("ROLE_ADMIN")

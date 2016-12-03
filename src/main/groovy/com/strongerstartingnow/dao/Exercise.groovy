@@ -1,10 +1,15 @@
 package com.strongerstartingnow.dao
 
+import groovy.transform.Canonical
+
 import org.springframework.stereotype.Component
+
 import com.strongerstartingnow.utilities.Convert
 
 @Component
+@Canonical
 class Exercise {
+	def id
 	def name
 	int currentMax
 	int currentReps = 8
