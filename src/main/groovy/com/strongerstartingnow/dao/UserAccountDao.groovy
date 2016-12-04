@@ -15,6 +15,9 @@ import org.springframework.stereotype.Component
 @Component
 class UserAccountDao {
 	
+	@Autowired
+	ExerciseAbilityDao exerciseAbilityDao
+	
 	private JdbcTemplate jdbcTemplate
 	 
 	@Autowired
@@ -77,8 +80,18 @@ class UserAccountDao {
 	}
 	
 	Boolean delete(UserAccount userAccount) {
+		Boolean success = false
+		if(exerciseAbilityDao.getExerciseAbilitiesForUser(userAccount) != null) {
+			exerciseAbilityDao.getExerciseAbilitiesForUser(userAccount).forEach {
+				success = exerciseAbilityDao.deleteExerciseAbility(it)
+			}
+		}
 		String sql = "delete from useraccount where username = (?)"
-		return this.jdbcTemplate.update(sql, userAccount.username) > 0 
+		Boolean userDeleted = this.jdbcTemplate.update(sql, userAccount.username) > 0
+		Boolean roleDeleted = userAccountRoleDao.delete(userAccount);
+		success = success && userDeleted && roleDeleted
+
+		return success
 	}
 	
 	UserAccount getUserAccount(String usernameProvided) {

@@ -21,30 +21,43 @@ class ExerciseDao {
 	Exercise exercise
 	
 	@Autowired
+	ExerciseAbilityDao exerciseAbilityDao
+	
+	@Autowired
 	DataSource dataSource
 	
 	Exercise createExercise(String exerciseName) {
 		def sql = new Sql(dataSource)
 		def exerciseId = sql.executeInsert "INSERT INTO exercise(name) VALUES ('" + exerciseName + "')"
-		def rowInfo = getExerciseById(exerciseId.flatten().getAt(0))
-		return new Exercise([id: rowInfo.id, name: rowInfo.name])
+		return getExerciseById(exerciseId.flatten().getAt(0))
 	}
 	
 	def deleteExercise(Exercise exercise) {
 		def sql = new Sql(dataSource)
+		if(exerciseAbilityDao.getExerciseAbilitiesForExercise(exercise) != null) {
+			exerciseAbilityDao.getExerciseAbilitiesForExercise(exercise).forEach {
+				exerciseAbilityDao.deleteExerciseAbility(it)
+			}
+		}
 		sql.execute "DELETE FROM exercise WHERE name = '" + exercise.name + "'"
 	}
 	
-	def getExerciseByName(def exerciseName) {
+	Exercise getExerciseByName(def exerciseName) {
 		def sql = new Sql(dataSource)
 		def result = sql.firstRow("SELECT * from exercise where name = ?", exerciseName.toString())
-		return result
+		if (result != null) {
+			return new Exercise([id: result.id, name: result.name])
+		} else
+			return null
 	}
 	
-	def getExerciseById(def exerciseId) {
+	Exercise getExerciseById(def exerciseId) {
 		def sql = new Sql(dataSource)
 		def result = sql.firstRow("SELECT * from exercise where id = ?", exerciseId.toString())
-		return result
+		if (result != null) {
+			return new Exercise([id: result.id, name: result.name])
+		} else
+			return null
 	}
 	
 }
