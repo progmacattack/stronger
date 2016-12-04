@@ -12,7 +12,7 @@ class ExerciseAbility {
 	UserAccount userAccount
 	def weightInPounds
 	def weightInKilos
-	def repeitions
+	def repetitions
 	def sets
 	def positionInRoutine
 }
