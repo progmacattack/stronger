@@ -73,6 +73,11 @@
 			<artifactId>commons-lang3</artifactId>
 			<version>3.5</version>
 		</dependency>
+		<dependency>
+			<groupId>com.stronger</groupId>
+			<artifactId>MavenUtility</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
 	</dependencies>
 
 	<build>

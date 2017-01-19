@@ -32,9 +32,10 @@ class EnglishWordDao {
 	EnglishWord getRandomWord() {
 		Params params = new Params()
 		params.setRegex(StringOrLetterUtilities.randomLetterRegex(2))
-		String sqlToUse = "select word from commonenglishwords where word regexp :regex limit 450"
+		String regex = params.regex
+		String sqlToUse = "select word from commonenglishwords where word regexp ?.regex limit 450"
 		def sql = new Sql(dataSource)
-		def rows = sql.rows sqlToUse, params
+		def rows = sql.rows(sqlToUse, params)
 		def list = new ArrayList<EnglishWord>()
 		rows.forEach {
 			list.add(it)

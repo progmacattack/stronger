@@ -11,5 +11,6 @@ import com.strongerstartingnow.enums.Sex
 class Human {
 	int weightInPounds
 	Sex sex = Sex.FEMALE
-	HumanAbilities humanAbilities	
+	HumanAbilities humanAbilities
+	List<ExerciseAbility> currentRoutine	
 }
