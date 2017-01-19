@@ -31,8 +31,8 @@ class ExerciseAbilityDao {
 		public class Params {
 			def userAccountUsername
 			def exerciseId
-			def weightInPounds
-			def weightInKilos
+			int weightInPounds
+			int weightInKilos
 			def repetitions
 			def sets
 			def positionInRoutine
@@ -76,10 +76,28 @@ class ExerciseAbilityDao {
 		}
 	}
 	
+	List<ExerciseAbility> saveOrUpdateExerciseAbilities(List<ExerciseAbility> eaList, UserAccount user) {		
+		def currentEas = getExerciseAbilitiesForUser(user)
+		//if user already has exercise ability w same exercise, then delete it before saving new
+		currentEas.each { currentEa ->
+			eaList.each { newEa ->
+				if(currentEa.exercise.id.equals(newEa.exercise.id)) {
+					deleteExerciseAbility(currentEa)
+				} 
+			}
+		}
+			
+		def savedEas = [];
+		eaList.each {
+			savedEas << createExerciseAbility(it)
+		}
+		return savedEas
+	}
+	
 	ExerciseAbility createExerciseAbility(ExerciseAbility exerciseAbility) {
 		def sql = new Sql(dataSource)
 		ExerciseAbilitySqlOps exerciseAbilitySqlOps = new ExerciseAbilitySqlOps();
-		println "params to use are: " + exerciseAbilitySqlOps.getParamsFrom(exerciseAbility).userAccountUsername
+		println "param (eg) to use for weight in pounds: " + exerciseAbilitySqlOps.getParamsFrom(exerciseAbility).weightInPounds
 		def exerciseAbilityId = sql.executeInsert(exerciseAbilitySqlOps.sqlInsertStatement, exerciseAbilitySqlOps.getParamsFrom(exerciseAbility));
 		println "id of create ea is $exerciseAbilityId"
 		return getExerciseAbilityById(exerciseAbilityId[0][0])

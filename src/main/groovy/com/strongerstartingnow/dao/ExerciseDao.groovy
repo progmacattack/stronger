@@ -40,7 +40,7 @@ class ExerciseDao {
 			}
 		}
 		sql.execute "DELETE FROM exercise WHERE name = '" + exercise.name + "'"
-	}
+	}			
 	
 	Exercise getExerciseByName(def exerciseName) {
 		def sql = new Sql(dataSource)

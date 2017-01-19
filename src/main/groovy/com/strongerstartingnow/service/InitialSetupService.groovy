@@ -1,14 +1,16 @@
 package com.strongerstartingnow.service;
 
-import org.jboss.logging.Logger;
-import org.springframework.stereotype.Service;
+import org.jboss.logging.Logger
+import org.springframework.stereotype.Service
 
 import com.strongerstartingnow.dao.Exercise
-import com.strongerstartingnow.dao.Human;
-import com.strongerstartingnow.enums.Sex;
-import com.strongerstartingnow.enums.AverageHumanBodyweight;
+import com.strongerstartingnow.dao.ExerciseAbility
+import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.HumanAbilities
-import com.strongerstartingnow.dao.HumanAbilities.typicalMaxAsPercentBodyweight;;
+import com.strongerstartingnow.dao.HumanAbilities.typicalMaxAsPercentBodyweight
+import com.strongerstartingnow.enums.AverageHumanBodyweight
+import com.strongerstartingnow.enums.Sex
+import com.strongerstartingnow.utilities.Convert
 
 @Service
 class InitialSetupService {
@@ -16,12 +18,47 @@ class InitialSetupService {
 	Human human;
 
 	Human setupHuman (Human human) {
-		def sex = human.sex		
-		human.humanAbilities = guessAllHumanAbilities(human);
-		logger.info("Prodcessed human be like " + human);
+		List<ExerciseAbility> defaultAbilities = setupDefaultAbilities(human);
+		human.currentRoutine = defaultAbilities;
+		logger.info("Processed human be like " + human);
 		return human;
 	}
 	
+	private List<ExerciseAbility> setupDefaultAbilities(Human human) {
+		List<ExerciseAbility> defaultAbilities = new ArrayList<ExerciseAbility>();
+		for(ex in Exercise.DefaultExercises.values()) {
+			Exercise exrcse = new Exercise([name: ex.sqlName])
+			ExerciseAbility ea = new ExerciseAbility([exercise: exrcse])
+			if(human.sex == Sex.FEMALE) {
+				if(human.weightInPounds <= 0) {
+					human.weightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds()
+				}							
+				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.weightInPounds * ex.getUntrainedFemaleMaxAsPercentBodyweight(), ex.defaultReps);							
+			} else {
+				if(human.weightInPounds <= 0) {
+					human.weightInPounds = AverageHumanBodyweight.MaleInUsa.inPounds()
+				}
+				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.weightInPounds * ex.getUntrainedMaleMaxAsPercentBodyweight(), ex.defaultReps);
+			}
+			ea.weightInKilos = ea.weightInPounds * Convert.Weight.kilograms.fromPounds();
+			
+			//round these weights to nearest 5
+			ea.weightInPounds = 5 * Math.round(ea.weightInPounds / 5)
+			ea.weightInKilos = 5 * Math.round(ea.weightInKilos / 5)	
+			ea.sets = ex.defaultSets
+			ea.repetitions = ex.defaultReps	
+			ea.positionInRoutine = ex.positionInRoutine
+			defaultAbilities.add(ea)	
+		}
+			
+		return defaultAbilities
+	}
+	
+	public saveRoutine(Human human) {
+		
+	}
+	
+	@Deprecated
 	public HumanAbilities guessAllHumanAbilities(Human human) {
 		logger.info("Details as first noticed in calculateHumanAbilities: " + human);
 		HumanAbilities abilities = new HumanAbilities();

@@ -14,7 +14,7 @@ class Convert {
 			this.relativeToPounds = relativeToPounds;
 		}
 		
-		double toKilograms() {
+		double fromPounds() {
 			return relativeToPounds;
 		}
 	}
@@ -27,6 +27,17 @@ class Convert {
 	 */
 	static int maxWeightToThisManyRepsEpleyFormula(Exercise exercise, int reps) {
 		int result = exercise.currentMax / (1 + reps / 30)
+		return result
+	}
+	
+	static int maxWeightToThisManyRepsEpleyFormula(int weight, int reps) {
+		int result = weight / (1 + reps / 30)
+		return result
+	}
+	
+	//this uses the Epley Formula
+	static int maxWeightToWorkingWeight(double weight, int reps) {
+		int result = weight / (1 + reps / 30)
 		return result
 	}
 }
