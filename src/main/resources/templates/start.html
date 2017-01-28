@@ -13,8 +13,8 @@
 		method="post">
 		<p>
 			<label>I weigh</label><input type="number"
-				th:field="*{human.weightInPounds}" name="weightInPounds" /> pounds<br />
-			<span th:each="err : ${#fields.errors('human.weightInPounds')}" th:text="${err}" th:class="error-message"></span>
+				th:field="*{human.bodyWeightInPounds}" name="bodyWeightInPounds" /> pounds<br />
+			<span th:each="err : ${#fields.errors('human.bodyWeightInPounds')}" th:text="${err}" th:class="error-message"></span>
 		</p>
 		<p>
 			I am a <label for="male">Man</label><input th:field="*{human.sex}"
