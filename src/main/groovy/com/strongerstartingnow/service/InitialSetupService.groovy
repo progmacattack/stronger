@@ -18,12 +18,11 @@ class InitialSetupService {
 	Human human;
 	List<ExerciseAbility> defaultAbilities;
 
-	Human setupHuman (Human human) {
+	void setupHuman (Human human) {
 		println "processing human $human"
 		setupDefaultAbilities(human);
 		human.currentRoutine = defaultAbilities;
 		logger.info("Processed human be like " + human);
-		return human;
 	}
 	
 	private void setupDefaultAbilities(Human human) {
@@ -65,15 +64,15 @@ class InitialSetupService {
 		HumanAbilities abilities = new HumanAbilities();
 		if (human.sex == Sex.MALE) {
 			try {
-				human.weightInPounds as int
+				human.bodyWeightInPounds as int
 			}
 			catch(NumberFormatException nfe) {
 			}
 			
-			if (human.weightInPounds <= 0) {
-				human.weightInPounds = AverageHumanBodyweight.MaleInUsa.inPounds();
+			if (human.bodyWeightInPounds <= 0) {
+				human.bodyWeightInPounds = AverageHumanBodyweight.MaleInUsa.inPounds();
 			}
-			int weight = human.weightInPounds;
+			int weight = human.bodyWeightInPounds;
 			
 			abilities.barbellBenchPress.currentMax = weight * typicalMaxAsPercentBodyweight.barbellBenchPress.untrainedMale
 			abilities.highBarbellBackSquat.currentMax = weight * typicalMaxAsPercentBodyweight.highBarbellBackSquat.untrainedMale
@@ -86,10 +85,10 @@ class InitialSetupService {
 			abilities.romanianDeadlift.currentMax = weight * typicalMaxAsPercentBodyweight.romanianDeadlift.untrainedMale
 	
 		} else if (human.sex == Sex.FEMALE) {
-			if (human.weightInPounds <= 0) {
-				human.weightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds();
+			if (human.bodyWeightInPounds <= 0) {
+				human.bodyWeightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds();
 			}
-			int weight = human.weightInPounds;
+			int weight = human.bodyWeightInPounds;
 			
 			abilities.barbellBenchPress.currentMax = weight * typicalMaxAsPercentBodyweight.barbellBenchPress.untrainedFemale
 			abilities.highBarbellBackSquat.currentMax = weight * typicalMaxAsPercentBodyweight.highBarbellBackSquat.untrainedFemale
