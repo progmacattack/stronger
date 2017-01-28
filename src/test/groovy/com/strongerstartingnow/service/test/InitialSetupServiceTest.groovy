@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
 import com.strongerstartingnow.enums.Sex
 import com.strongerstartingnow.enums.AverageHumanBodyweight
+import com.strongerstartingnow.dao.ExerciseAbility
 import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.HumanAbilities
 import com.strongerstartingnow.service.InitialSetupService
@@ -30,18 +31,18 @@ class InitialSetupServiceTest {
 	
 	@Test
 	void testSetupHuman() {
-		Human human = initialSetupService.setupHuman(new Human(sex: Sex.MALE))
-		assertTrue("Setup human weight should equal constant for male", human.weightInPounds == (int)AverageHumanBodyweight.MaleInUsa.weightInPounds)
-		
-		HumanAbilities humanAbilities = human.humanAbilities
-		assertTrue("Some abilities are set", humanAbilities != null)
-		assertTrue("Default reps should be 8", humanAbilities.barbellBenchPress.currentReps == 8)
-		
-		humanAbilities.barbellBenchPress.setCurrentWorkingWeight();
-		assertTrue("Current working weight should be less than max", humanAbilities.barbellBenchPress.currentWorkingWeight < humanAbilities.barbellBenchPress.currentMax);
+		Human humanMan = initialSetupService.setupHuman(new Human(sex: Sex.MALE))
+		assertTrue("Setup human weight should equal constant for male", humanMan.bodyWeightInPounds == (int)AverageHumanBodyweight.MaleInUsa.weightInPounds)
 		
 		Human humanWoman = initialSetupService.setupHuman(new Human(sex: Sex.FEMALE))
-		assertTrue("Setup human weight should equal constant for female", humanWoman.weightInPounds == (int)AverageHumanBodyweight.FemaleInUsa.weightInPounds)	
+		assertTrue("Setup human weight should equal constant for female", humanWoman.bodyWeightInPounds == (int)AverageHumanBodyweight.FemaleInUsa.weightInPounds)
 		
+		List<ExerciseAbility> routine = humanMan.currentRoutine
+		assertTrue("Some abilities are set", routine != null)
+		
+		for(ExerciseAbility ea: routine) {
+			assertTrue("Default reps should be 8", ea.repetitions == 8)
+			assertTrue("Should have some default weight", ea.weightInPounds > 0);
+		}
 	}
 }

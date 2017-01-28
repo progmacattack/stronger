@@ -16,29 +16,32 @@ import com.strongerstartingnow.utilities.Convert
 class InitialSetupService {
 	Logger logger = Logger.getLogger(this.getClass());
 	Human human;
+	List<ExerciseAbility> defaultAbilities;
 
 	Human setupHuman (Human human) {
-		List<ExerciseAbility> defaultAbilities = setupDefaultAbilities(human);
+		println "processing human $human"
+		setupDefaultAbilities(human);
 		human.currentRoutine = defaultAbilities;
 		logger.info("Processed human be like " + human);
 		return human;
 	}
 	
-	private List<ExerciseAbility> setupDefaultAbilities(Human human) {
-		List<ExerciseAbility> defaultAbilities = new ArrayList<ExerciseAbility>();
+	private void setupDefaultAbilities(Human human) {
+		defaultAbilities = new ArrayList<ExerciseAbility>();
 		for(ex in Exercise.DefaultExercises.values()) {
 			Exercise exrcse = new Exercise([name: ex.sqlName])
 			ExerciseAbility ea = new ExerciseAbility([exercise: exrcse])
 			if(human.sex == Sex.FEMALE) {
-				if(human.weightInPounds <= 0) {
-					human.weightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds()
+				if(human.bodyWeightInPounds <= 0) {
+					human.bodyWeightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds()
 				}							
-				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.weightInPounds * ex.getUntrainedFemaleMaxAsPercentBodyweight(), ex.defaultReps);							
+				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.bodyWeightInPounds * ex.getUntrainedFemaleMaxAsPercentBodyweight(), ex.defaultReps);							
 			} else {
-				if(human.weightInPounds <= 0) {
-					human.weightInPounds = AverageHumanBodyweight.MaleInUsa.inPounds()
+				if(human.bodyWeightInPounds <= 0) {
+					println "Average male weight: " + AverageHumanBodyweight.MaleInUsa.inPounds()
+					human.bodyWeightInPounds = AverageHumanBodyweight.MaleInUsa.inPounds()
 				}
-				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.weightInPounds * ex.getUntrainedMaleMaxAsPercentBodyweight(), ex.defaultReps);
+				ea.weightInPounds = Convert.maxWeightToWorkingWeight(human.bodyWeightInPounds * ex.getUntrainedMaleMaxAsPercentBodyweight(), ex.defaultReps);
 			}
 			ea.weightInKilos = ea.weightInPounds * Convert.Weight.kilograms.fromPounds();
 			
@@ -50,8 +53,6 @@ class InitialSetupService {
 			ea.positionInRoutine = ex.positionInRoutine
 			defaultAbilities.add(ea)	
 		}
-			
-		return defaultAbilities
 	}
 	
 	public saveRoutine(Human human) {

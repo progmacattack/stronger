@@ -32,24 +32,26 @@ class UserAccountDao {
 	UserAccountRoleDao userAccountRoleDao
 	
 	Boolean create(UserAccount userAccount) {
-		String sql = "insert into useraccount (username, name, email, password, enabled, useraccount_role_id) values (?,?,?,?,?,?)"
+		String sql = "insert into useraccount (username, name, email, password, enabled) values (?,?,?,?,?)"
 		String hashedPass = encryptPassword.encode(userAccount.password)
 		userAccount.password = hashedPass
-		
-		UserAccountRole createdUserAccountRole = userAccountRoleDao.create(userAccount, UserAccountRole.RoleEnum.ROLE_USER)
-		println "created role is: " + createdUserAccountRole.toString();
-		userAccount.userAccountRole = createdUserAccountRole;
-		
+				
 		//try to create user account
 		try {
 			Boolean userAccountCreated = this.jdbcTemplate
 				.update(sql, userAccount.username, userAccount.name, userAccount.email, userAccount.password,
-					userAccount.enabled, userAccount.userAccountRole.id) > 0;
+					userAccount.enabled) > 0;
 		} catch(Exception e) {
 			//delete role if there was a problem creating user account and return false
+			println "problem creating user account $userAccount.username"
+			println e.printStackTrace()
 			userAccountRoleDao.delete(userAccount);
 			return false;
 		}
+		
+		UserAccountRole createdUserAccountRole = userAccountRoleDao.create(userAccount, UserAccountRole.RoleEnum.ROLE_USER)
+		println "created role is: " + createdUserAccountRole.toString();
+		userAccount.userAccountRole = createdUserAccountRole;
 		
 		//returns true if user has been created
 		return true;
@@ -88,8 +90,9 @@ class UserAccountDao {
 		}
 		String sql = "delete from useraccount where username = (?)"
 		Boolean userDeleted = this.jdbcTemplate.update(sql, userAccount.username) > 0
-		Boolean roleDeleted = userAccountRoleDao.delete(userAccount);
-		success = success && userDeleted && roleDeleted
+		Boolean roleDeleted = (userAccountRoleDao.getUserRole(userAccount) == null)
+
+		success = userDeleted && roleDeleted
 
 		return success
 	}

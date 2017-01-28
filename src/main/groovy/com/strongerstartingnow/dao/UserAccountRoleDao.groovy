@@ -32,7 +32,7 @@ class UserAccountRoleDao {
 			def param = [userAccount.username] as Object[]
 			return this.jdbcTemplate.queryForObject(sqlStmnt, param, new RowMapper<UserAccountRole>() {
 				UserAccountRole mapRow(ResultSet rs, int row) throws SQLException {
-					UserAccountRole uar = new UserAccountRole([id: rs.getString("id"), username: rs.getString("username"), roleEnum: rs.getString("role") as RoleEnum ])
+					UserAccountRole uar = new UserAccountRole([username: rs.getString("username"), roleEnum: rs.getString("role") as RoleEnum ])
 				}
 			});
 		} else {
@@ -50,12 +50,19 @@ class UserAccountRoleDao {
 	
 	RoleEnum getUserRole(UserAccount userAccount) {
 		String sql = "select * from useraccount_role where username = ?"
+		String countSql = "select count(*) from useraccount_role where username = ?"
 		def param = [userAccount.username] as Object[]
-		RoleEnum result = this.jdbcTemplate.queryForObject(sql, param, new RowMapper<RoleEnum>() {
-			RoleEnum mapRow(ResultSet rs, int row) throws SQLException {
-				RoleEnum result = rs.getString("role");
-			}
-		})
+		Integer fetchSize = this.jdbcTemplate.queryForObject(countSql, param, Integer.class)
+		println "fetch size is $fetchSize"
+		
+		RoleEnum result = null
+		if(fetchSize > 0) {
+			result = this.jdbcTemplate.queryForObject(sql, param, new RowMapper<RoleEnum>() {
+				RoleEnum mapRow(ResultSet rs, int row) throws SQLException {
+					result = rs.getString("role");
+				}
+			})
+		}
 		return result;
 	}
 }

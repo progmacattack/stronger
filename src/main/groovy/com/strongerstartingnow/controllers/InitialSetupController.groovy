@@ -24,12 +24,7 @@ public class InitialSetupController {
 	
 	@Autowired
 	RoutineService rs;
-/*	
-	@ModelAttribute("human")
-	public Human newHuman() {
-		return new Human();
-	}
-	*/
+
 	@RequestMapping(value="/createprofile", method=RequestMethod.POST)
 	public String createProfile(Human human, Model model, BindingResult result) {
 		
@@ -38,7 +33,7 @@ public class InitialSetupController {
 		} else {
 			iss.setupHuman(human)
 			model.addAttribute("human", human)
-			return "initialprofile"
+			return "routine"
 		}
 	}
 	
@@ -47,7 +42,6 @@ public class InitialSetupController {
 		if(principal == null) {
 			return "error"
 		}
-		println("principal: " + principal.getName());
 		rs.saveOrUpdateRoutine(human, principal);				
 		return "saveroutine"
 		
