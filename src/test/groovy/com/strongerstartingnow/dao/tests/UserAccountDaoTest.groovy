@@ -28,8 +28,8 @@ class UserAccountDaoTest {
 	@Autowired
 	UserAccountRoleDao userAccountRoleDao
 	
-	UserAccount userAccount1 = new UserAccount(email: "wet@feet.com", username: "tangerine", password: "hellohello", name: "Mrv Man")
-	UserAccount userAccount2 = new UserAccount(email: "potato@leek.com", username: "keyboard", password: "hellohello", name: "Keyboard Tapper")
+	UserAccount userAccount1 = new UserAccount(email: "wet@feet.com", username: "2tangerine", password: "hellohello", name: "Mrv Man")
+	UserAccount userAccount2 = new UserAccount(email: "potato@leek.com", username: "2keyboard", password: "hellohello", name: "Keyboard Tapper")
 	def testUserAccounts = [userAccount1, userAccount2]
 	
 	@Before

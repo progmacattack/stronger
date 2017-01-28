@@ -14,6 +14,7 @@ import com.strongerstartingnow.dao.ExerciseDao
 import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.UserAccount
 import com.strongerstartingnow.dao.UserAccountDao
+import com.strongerstartingnow.utilities.Convert;
 @Slf4j
 @Service
 class RoutineService {
@@ -33,6 +34,14 @@ class RoutineService {
 		List<ExerciseAbility> eaList = human.getCurrentRoutine();
 		eaList.each {			
 			it.setUserAccount(u);
+			if(it.weightInKilos == 0) {
+				it.weightInKilos = it.weightInPounds * Convert.Weight.kilograms.fromPounds();
+				it.weightInKilos = 5 * Math.round(it.weightInKilos / 5)
+			}
+			if(it.weightInPounds == 0) {
+				it.weightInPounds = it.weightInKilos / Convert.Weight.kilograms.fromPounds();
+				it.weightInPounds = 5 * Math.round(it.weightInPounds / 5)
+			}
 			Exercise ex = exerciseDao.getExerciseByName(it.exercise.name)
 			if(ex != null) {
 				it.setExercise(ex)
@@ -42,4 +51,8 @@ class RoutineService {
 		}
 		exerciseAbilityDao.saveOrUpdateExerciseAbilities(eaList, u);
 	}
+	
+	Human findHumanFromUserAccount(UserAccount userAccount) {
+		
+	} 
 }

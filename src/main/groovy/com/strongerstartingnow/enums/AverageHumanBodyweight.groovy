@@ -7,12 +7,12 @@ enum AverageHumanBodyweight {
 	MaleInUsa (194.7),
 	FemaleInUsa (164.7);
 	
-	private def weightInPounds; //in pounds
-	private def  weightInKilograms;
+	private int weightInPounds; //in pounds
+	private int  weightInKilograms;
 	
 	AverageHumanBodyweight(def weightInPounds) {
 		this.weightInPounds = weightInPounds
-		this.weightInKilograms = weightInPounds * Weight.pounds.toKilograms()
+		this.weightInKilograms = weightInPounds * Weight.kilograms.fromPounds()
 	}
 	
 	def inPounds() {

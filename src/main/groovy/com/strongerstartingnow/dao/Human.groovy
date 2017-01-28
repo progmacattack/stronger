@@ -9,8 +9,10 @@ import com.strongerstartingnow.enums.Sex
 @ToString
 @Component
 class Human {
-	int weightInPounds
+	int bodyWeightInPounds
+	int bodyWeightInKilograms
 	Sex sex = Sex.FEMALE
 	HumanAbilities humanAbilities
+	UserAccount userAccount
 	List<ExerciseAbility> currentRoutine	
 }

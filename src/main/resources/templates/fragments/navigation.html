@@ -12,7 +12,7 @@
 			<li>
 				<a th:href="@{/joinus}" th:if="${username} == null">Join</a>
 			</li>
-			<li>Nav link 3</li>
+			<li th:if="${username} != null"><a th:href="@{/routine}">My routine</a></li>
 		</ul>
 	</th:block>
 </nav>

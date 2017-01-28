@@ -20,7 +20,7 @@
 		
 		<br /><input type="range" onclick="showElements('adjust-routine-save')" step="5" class="slider weight-slider" th:id="'activity-' + ${iterstat.index}" th:oninput="'displaySliderNumbers(\'activity-' + ${iterstat.index} + '\', \'current-weight\', \'currentWeightFor\')'" th:min="${(exerciseAbility.getWeightInPounds() % 2) gt 0 ? exerciseAbility.getWeightInPounds() / 2 + 3 : exerciseAbility.getWeightInPounds() / 2} " th:max="${exerciseAbility.getWeightInPounds() * 2}" th:field="*{currentRoutine[__${iterstat.index}__].weightInPounds}" th:value="${exerciseAbility.getWeightInPounds()}" />
 		<span class="current-weight" th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" th:text="${exerciseAbility.getWeightInPounds()}"></span>
-	    
+	     
 	     <br /><input type="range" th:field="*{currentRoutine[__${iterstat.index}__].repetitions}" onclick="showElements('adjust-routine-save')" step="1" class="slider rep-slider" th:id="'reps-activity-' + ${iterstat.index}"  th:oninput="'displaySliderNumbers(\'reps-activity-' + ${iterstat.index} + '\', \'current-reps\', \'currentRepsFor\')'" th:min="1" th:max="15" th:value="${exerciseAbility.getRepetitions()}" />
 		<span class="current-reps" th:attr = "data-current-reps-for = 'reps-activity-' + ${iterstat.index}" th:text="${exerciseAbility.getRepetitions()}"></span>
 	 	

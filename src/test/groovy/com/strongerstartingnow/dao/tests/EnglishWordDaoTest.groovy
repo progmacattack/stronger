@@ -27,21 +27,22 @@ class EnglishWordDaoTest {
 	@Test
 	public void testRandomUsername() {
 		int i = 0
-		while (i < 100) {
-			def randomUsername = englishWordDao.getRandomWord().word + englishWordDao.getRandomWord().word
-			println "random username is: $randomUsername"
+		def randomUsername;
+		while (i < 10) {
+			randomUsername = englishWordDao.getRandomWord().word + englishWordDao.getRandomWord().word
+			println "random username is: $randomUsername and i is $i"
 			i++
-			assert randomUsername.length > 0
+			assert randomUsername.length() > 0
 		}
 	}
 	
-	@Test
+/*	@Test
 	public void testNoVowel() {
 		int i = 0
 		while(i < 100) {
 			assert "aeoiu".indexOf(englishWordDao.randomConsonant().toString()) == -1
 			i++
 		}
-	}
+	}*/
 
 }
