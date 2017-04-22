@@ -1,15 +1,12 @@
 package com.strongerstartingnow
 
-import javax.sql.DataSource
 import org.springframework.boot.SpringApplication
 import org.springframework.boot.autoconfigure.SpringBootApplication
-import org.springframework.boot.autoconfigure.jdbc.DataSourceProperties
-import org.springframework.context.annotation.Bean
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
-import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter
 
 @SpringBootApplication
-class StrongerApplication {
+class StrongerApplication extends WebMvcConfigurerAdapter{
 
 	static void main(String[] args) {
 		SpringApplication.run StrongerApplication, args

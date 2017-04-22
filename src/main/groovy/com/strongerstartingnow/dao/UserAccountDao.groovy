@@ -1,17 +1,21 @@
 package com.strongerstartingnow.dao
 
-import com.strongerstartingnow.utilities.EncryptPassword
+import groovy.util.logging.Slf4j
+
 import java.sql.ResultSet
 import java.sql.SQLException
 
 import org.springframework.beans.factory.annotation.Autowired
-import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.dao.EmptyResultDataAccessException
 import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.ResultSetExtractor
 import org.springframework.jdbc.core.RowMapper
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.stereotype.Component
 
+import com.strongerstartingnow.utilities.EncryptPassword
+
+@Slf4j
 @Component
 class UserAccountDao {
 	
@@ -97,7 +101,7 @@ class UserAccountDao {
 		return success
 	}
 	
-	UserAccount getUserAccount(String usernameProvided) {
+	UserAccount getUserAccount(String usernameProvided) throws UsernameNotFoundException {
 		String sql = "select * from userAccount where username = (?)"
 		def params = [usernameProvided] as Object[]
 		UserAccount userAccount = new UserAccount()
@@ -116,7 +120,8 @@ class UserAccountDao {
 				}
 			})
 		} catch(EmptyResultDataAccessException e) {
-			e.printStackTrace()	
+			log.debug("Caught an EmptyResultDataAccessException. Printing stracktrace. Will now throw a UsernameNotFoundException")
+			throw new UsernameNotFoundException("Could not find username " + usernameProvided)
 		}
 		return userAccount;
 	}

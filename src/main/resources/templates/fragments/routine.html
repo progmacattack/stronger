@@ -1,0 +1,102 @@
+<div id="routine-header" class="flex-grid">
+	<div class="">
+		<h2 class="huge">Here's your workout routine.</h2>
+		<button class="primary block" type="button" onclick="saveRoutine(this)" data-also-create-account="false" id="save-button">
+			<th:block th:text="${newRoutine != null and newRoutine}? 'Save': 'Save progress'">
+			Save progress
+			</th:block>
+		</button>
+		<div class="block" id="save-area-content"></div>
+		<div class="block" id="save-status"></div>
+	</div>
+</div>
+
+<div id="cycle-and-week" class="text-container huge-top-margin">
+	<div class="inline-h2">Cycle <span id="previous-cycle" onclick="renderPreviousCycle()" class="underline-and-pointer">&lt; </span>
+		<span id="current-cycle-number" th:text="${saveRoutineInfo.exerciseRoutineAllPro.cycle}"></span> 
+		<span id="next-cycle" onclick="renderNextCycle()" class="underline-and-pointer"> &gt;</span> 
+		<span class="smaller">(Each cycle is 5 weeks)</span>
+	</div>
+	
+	<ul class = "horizontal-list" th:with="curWeek = ${saveRoutineInfo.exerciseRoutineAllPro.week}">
+		<li class="week-select" th:classappend="${curWeek == 1}?'active':''" id="week-1-select" data-week-number="1" onclick="switchWeek(this)">Week 1</li>
+		<li class="week-select" th:classappend="${curWeek == 2}?'active':''" data-week-number="2" onclick="switchWeek(this)">Week 2</li>
+		<li class="week-select" th:classappend="${curWeek == 3}?'active':''" data-week-number="3" onclick="switchWeek(this)">Week 3</li>
+		<li class="week-select" th:classappend="${curWeek == 4}?'active':''" data-week-number="4" onclick="switchWeek(this)">Week 4</li>
+		<li class="week-select" th:classappend="${curWeek == 5}?'active':''" data-week-number="5" onclick="switchWeek(this)">Week 5</li>
+	</ul>
+	<p id="message-alert">This is your recommended routine. However, you can customize the starting weight by adjusting the sliders.</p>
+</div>
+<div id="initial-routine" th:object="${saveRoutineInfo}" class="flex-grid modest-top-margin" th:fragment="main-routine">
+	<div class="col-1-of-3 col-box">
+		<h2>Day A: Heavy</h2>
+		<form id="routine-form" ACTION="#" th:action="@{/saveroutine}" th:object="${saveRoutineInfo}" method="POST">
+		<input type="hidden" th:field="*{exerciseRoutineAllPro.cycle}" id="current-cycle-input"/>
+		<input type="hidden" th:field="*{exerciseRoutineAllPro.week}" id="current-week-input"/>
+		<th:block th:each="exerciseAbility, iterstat : *{currentExercises}" th:field="*{currentExercises}">
+			<div class="exercise-block">
+				<label th:for="'activity-' + ${iterstat.index}"><span th:text="${exerciseAbility.getExercise().getName()}"></span></label>
+				<input type="hidden" th:field="*{currentExercises[__${iterstat.index}__].exercise.name}" />
+				
+				<br />
+				
+				<span class="current-weight generous-line-height" th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" 
+					th:text="${exerciseAbility.getWeightInPounds()}"></span> lbs
+				<input type="range" onclick="showElements('adjust-routine-save')" step="5" class="slider weight-slider"
+					 th:id="'activity-' + ${iterstat.index}" th:oninput="'displaySliderNumbers(\'activity-' + ${iterstat.index} + '\', 
+					 \'current-weight\', \'currentWeightFor\')'" th:min="${(exerciseAbility.getWeightInPounds() % 2) gt 0 ? 
+					 exerciseAbility.getWeightInPounds() / 2 + 3 : exerciseAbility.getWeightInPounds() / 2} " 
+					 th:max="${exerciseAbility.getWeightInPounds() * 2}" th:field="*{currentExercises[__${iterstat.index}__].weightInPounds}"
+					 th:value="${exerciseAbility.getWeightInPounds()}" />
+				
+			     
+			     <br />
+			     
+				 <input type="text" th:field="*{currentExercises[__${iterstat.index}__].repetitions}" readonly="true" 
+				 class="current-reps generous-line-height unstyled-text-input" 
+				 th:attr="data-current-reps-for='reps-activity-' + ${iterstat.index}"/>repetitions
+			 	
+			 	<br />
+			 	<input type="range" th:field="*{currentExercises[__${iterstat.index}__].sets}" onclick="showElements('adjust-routine-save')" 
+			 	step="1" class="slider set-slider" th:id="'sets-activity-' + ${iterstat.index}"  
+			 	th:oninput="'displaySliderNumbers(\'sets-activity-' + ${iterstat.index} + '\', \'current-sets\', \'currentSetsFor\')'" 
+			 	th:min="1" th:max="5" th:value="${exerciseAbility.getSets()}" />
+				<span class="current-sets generous-line-height extra-right-padding" th:attr = "data-current-sets-for = 'sets-activity-' + ${iterstat.index}" 
+				th:text="${exerciseAbility.getSets()}"></span>sets
+			 	
+			 	<br />
+				<br />
+			</div>
+		</th:block>
+		</form>
+	</div>
+	
+	<div class="col-2-of-3 col-box">
+		<h2>Day B: Medium</h2>
+		<th:block th:each="exerciseAbility, iterstat : *{currentExercises}">
+			<div class="exercise-block" th:id="${#ids.seq('day-b-activity-')}">
+				<span class="exercise-title generous-line-height" th:text="${exerciseAbility.getExercise().getName()}">Something here</span><br />
+				<span class="exercise-weight generous-line-height current-weight"
+				 th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" 
+				 util:roundtofive-text="${exerciseAbility.getWeightInPounds() * 0.9}">60</span> lbs<br />
+				<span class="current-reps exercise-reps generous-line-height extra-right-padding" 				
+				th:text="${exerciseAbility.getRepetitions()}">8 reps</span>repetitions<br />
+				<span class="exercise-sets generous-line-height extra-right-padding" th:text="${exerciseAbility.getSets()}">sets</span>sets<br />				
+			</div>
+		</th:block>		
+	</div>
+		
+	<div class="col-3-of-3 col-box">
+		<h2>Day C: Light</h2>
+		<th:block th:each="exerciseAbility, iterstat : *{currentExercises}">
+			<div class="exercise-block" th:id="${#ids.seq('day-c-activity-')}">
+				<span class="exercise-title generous-line-height" th:text="${exerciseAbility.getExercise().getName()}">Something here</span><br />
+				<span class="exercise-weight generous-line-height current-weight" 
+				th:attr = "data-current-weight-for = 'activity-' + ${iterstat.index}" 
+				util:roundtofive-text="${exerciseAbility.getWeightInPounds() * 0.8}">60</span> lbs.<br />
+				<span class="current-reps exercise-reps generous-line-height extra-right-padding" th:text="${exerciseAbility.getRepetitions()}">8 reps</span>repetitions<br />
+				<span class="exercise-sets generous-line-height extra-right-padding" th:text="${exerciseAbility.getSets()}">sets</span>sets<br />				
+			</div>
+		</th:block>		
+	</div>
+</div>

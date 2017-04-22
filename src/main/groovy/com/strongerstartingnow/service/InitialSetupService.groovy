@@ -5,12 +5,14 @@ import org.springframework.stereotype.Service
 
 import com.strongerstartingnow.dao.Exercise
 import com.strongerstartingnow.dao.ExerciseAbility
+import com.strongerstartingnow.dao.ExerciseRoutineAllPro
 import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.HumanAbilities
 import com.strongerstartingnow.dao.HumanAbilities.typicalMaxAsPercentBodyweight
 import com.strongerstartingnow.enums.AverageHumanBodyweight
 import com.strongerstartingnow.enums.Sex
 import com.strongerstartingnow.utilities.Convert
+import com.strongerstartingnow.webobjects.SaveRoutineInfo
 
 @Service
 class InitialSetupService {
@@ -18,11 +20,16 @@ class InitialSetupService {
 	Human human;
 	List<ExerciseAbility> defaultAbilities;
 
-	void setupHuman (Human human) {
-		println "processing human $human"
-		setupDefaultAbilities(human);
-		human.currentRoutine = defaultAbilities;
-		logger.info("Processed human be like " + human);
+	void setupSaveRoutineInfo(SaveRoutineInfo saveRoutineInfo) {
+		println "Setting up current routine for ${saveRoutineInfo.human}"
+		setupDefaultAbilities(saveRoutineInfo.human)
+		setupInitialAllProRoutine(saveRoutineInfo);
+		saveRoutineInfo.currentExercises = defaultAbilities;
+	}
+	
+	private void setupInitialAllProRoutine(SaveRoutineInfo sri) {
+		ExerciseRoutineAllPro erap = new ExerciseRoutineAllPro([cycle: 1, week: 1]);
+		sri.exerciseRoutineAllPro = erap;
 	}
 	
 	private void setupDefaultAbilities(Human human) {

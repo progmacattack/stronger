@@ -1,18 +1,28 @@
-<nav>
+<nav class="flex-grid" id="navigation">
 	<th:block th:with="username=${#httpServletRequest.remoteUser}">
-		<strong th:inline="text" th:if="${username} != null">Welcome, [[${username}]]</strong>
-		<ul>
+		<ul class="col-large-small-1-of-2">
 			<li><a href="/">Home</a></li>
-			<li>
+			<li th:if="${username} == null">
+				<a th:href="@{/joinus}">Join</a>
+			</li>
+<!-- 			<li th:if="${username} != null">
+				<a th:href="@{/currentusers}">Current users</a>
+			</li> -->
+			
+			<li th:if="${username} != null and ${userHasRoutine}">
+				<a th:href="@{/routine}">My routine</a>
+			</li>
+		</ul>
+		<div id="signin-signout" class="col-large-small-2-of-2 text-align-r">
+			<div id="welcome-username">
+			<strong th:inline="text" th:if="${username} != null">Welcome, [[${username}]]</strong>
+			</div>
+			<div id="signin-signout-button">
 				<a th:href="@{/login}" th:if="${username} == null">Login</a>
 				<form th:action="@{/logout}" th:if="${username} != null" method="post">
-            		<input type="submit" value="Sign Out"/>
-       			</form>
-			</li>
-			<li>
-				<a th:href="@{/joinus}" th:if="${username} == null">Join</a>
-			</li>
-			<li th:if="${username} != null"><a th:href="@{/routine}">My routine</a></li>
-		</ul>
+	           		<input type="submit" value="Sign Out"/>
+	     		</form>
+	     	</div>
+	     </div>
 	</th:block>
 </nav>

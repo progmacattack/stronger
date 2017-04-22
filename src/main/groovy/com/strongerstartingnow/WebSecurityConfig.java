@@ -3,27 +3,27 @@ package com.strongerstartingnow;
 import javax.sql.DataSource;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.jdbc.JdbcTemplateAutoConfiguration;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.security.authentication.encoding.PasswordEncoder;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
-import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
-import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.web.bind.annotation.RestController;
 
 import com.strongerstartingnow.utilities.EncryptPassword;
 
 @Configuration
 @EnableWebSecurity
+@RestController
+@EnableGlobalMethodSecurity(securedEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 	@Autowired
 	private DataSource dataSource;
 	
 	@Autowired
 	private EncryptPassword encryptPassword;
-	
+    
 	@Override
 	protected void configure(AuthenticationManagerBuilder auth) throws Exception {
 		auth.jdbcAuthentication().dataSource(dataSource)
@@ -34,7 +34,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 					"select username,role from useraccount_role where username=?"
 			)
 			.passwordEncoder(encryptPassword);
+			
 	}
+	
 	
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
@@ -45,9 +47,12 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
 				.and()
 			.formLogin()
 				.loginPage("/login")
+				.loginPage("/joinus")
 				.permitAll()
 				.and()
+			
 			.logout()
+				.logoutSuccessUrl("/")
 				.permitAll();
 	}
 	

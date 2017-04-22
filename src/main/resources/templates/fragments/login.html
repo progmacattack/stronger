@@ -4,8 +4,10 @@
  <div th:if="${param.logout}">
      You have been logged out.
  </div>
+ <h2>Been here before?</h2>
  <form th:action="@{/login}" method="post">
-     <div><label> User Name : <input type="text" name="username"/> </label></div>
-     <div><label> Password: <input type="password" name="password"/> </label></div>
-     <div><input type="submit" value="Sign In"/></div>
+     <div><label class="flex-grid col-small-large-1-of-2"> User Name : <input type="text" name="username" 
+     class="flex-grid col-small-large-2-of-2" /> </label></div>
+     <div><label class="flex-grid col-small-large-1-of-2"> Password: <input type="password" name="password" class="flex-grid col-small-large-2-of-2"/> </label></div>
+     <div><p><input type="submit" class="secondary" value="Sign In"/></p></div>
  </form>

@@ -10,18 +10,17 @@
 	<th:block th:replace="fragments/header"></th:block>
 	<div id="main">
 		<th:block th:replace="fragments/navigation"></th:block>
-		<article>
-			<form class="newUserForm" th:object="${userAccount}" method="POST" action="#" >
-			<label>Choose Username:</label> <input name="username" type="text" /><br />
+		<article th:fragment="createaccount">
+			<form class="newUserForm" id="new-user-form" th:object="${userAccount}" method="POST" th:action="@{/joinus}" >
+			<label>Choose Username:</label> <input name="username" type="text" />
 			<span class="error-message" th:errors="*{username}">Error placeholder</span>
-			<label>Set password:</label><input name="password" type="text" /><br />
+			<label>Set password:</label><input name="password" type="password" /><br />
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
-			<input name="submit" value="Begin" type="submit" />
+			<!-- <input name="submit" value="Begin" type="submit" /> -->
 			</form>
-			<p><a th:href="@{joinus/random}" rel="nofollow">Assign random username and password and login</a></p>
+			<p>-or-<br/><a href="#" onclick="requestRandomUsernamePassword(this)" id="random-username-password-link" rel="nofollow">give me a random username and save it</a></p>
 			<p><th:block th:text="${randomUsername}"></th:block></p>
 		</article>
-		<aside>Something here</aside>
 	</div>
 </body>
 </html>

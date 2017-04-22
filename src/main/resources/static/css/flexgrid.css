@@ -2,36 +2,73 @@
 
 #main {
 	display: flex;
-	flex-flow: row;
+	flex-flow: column;
 }
 
 header, footer {
 	display: block;
-	padding: 5px;
 }
 
 #main > nav {
-	padding: 5px;
-	flex: 2;
 	order: 1;
 }
 
 #main > article {
-	padding: 5px;
-	flex: 6;
-	order: 2;
+	order: 2
 }
 
 #main > aside {
-	padding: 5px;
-	flex: 2;
 	order: 3; 
 }
 
 .flex-grid {
 	display: flex;
+	flex-flow: row;
 }
 
 .flex-grid .col {
+	flex: 1;
+}
+
+.flex-grid .col-large-small-1-of-2 {
+	flex: 2;
+	order: 1;
+}
+
+.flex-grid .col-large-small-2-of-2 {
+	flex: 1;
+	order: 2;
+}
+
+.flex-grid .col-small-large-1-of-2 {
+	flex: 1;
+	order: 1;
+}
+
+.flex-grid .col-small-large-2-of-2 {
+	flex: 2;
+	order: 2;
+}
+
+.lil-padding {
+	padding: 5px;
+}
+
+.right-border {
+	border-right: 1px solid gray;
+}
+
+.col-1-of-3 {
+	order: 1;
+	flex: 1;
+}
+
+.col-2-of-3 {
+	order: 2;
+	flex: 1;
+}
+
+.col-3-of-3 {
+	order: 3;
 	flex: 1;
 }
