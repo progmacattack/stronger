@@ -1,0 +1,20 @@
+4-14-2017
+- When logged in user saves routine, cycle number and week number are now passed in and saved to db
+
+4-15-2017
+- When any user saves routine, cycle number and week number are now passed in and saved to db
+- Repetitions not being updated/saved is fixed
+- Removed 'current users' link
+- Made assign random username/password an AJAX request
+
+4-16-2017
+- Created endpoint to update navigation bar after account creation, implemented in JS
+- Logout returns home
+- Added login to home page
+
+Problems:
+- Initial save with random user does not save cycle week ---- cannot replicate
+
+Ideas:
+- Make front end look better
+- Show 'My routine' link after initial save

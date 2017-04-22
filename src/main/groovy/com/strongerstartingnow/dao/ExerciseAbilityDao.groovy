@@ -124,6 +124,10 @@ class ExerciseAbilityDao {
 		return resultList
 	} 
 	
+	List<ExerciseAbility> getRoutine(UserAccount user) {
+		return getExerciseAbilitiesForUser(user)
+	}
+	
 	List<ExerciseAbility> getExerciseAbilitiesForUser(UserAccount user) {
 		def sql = new Sql(dataSource)
 		ExerciseAbilitySqlOps exerciseAbilitySqlOpts = new ExerciseAbilitySqlOps()

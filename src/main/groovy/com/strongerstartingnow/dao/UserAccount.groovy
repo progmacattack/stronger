@@ -1,11 +1,16 @@
 package com.strongerstartingnow.dao
 import groovy.transform.Canonical
+
 import java.security.Principal
+import java.util.Collection;
+
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import com.strongerstartingnow.validators.ValidUsername
 @Canonical
 @Component
-class UserAccount implements Principal {
+class UserAccount implements Principal, UserDetails {
 	@ValidUsername
 	String username
 	def name
@@ -75,7 +80,33 @@ class UserAccount implements Principal {
 			return false;
 		return true;
 	}
+
+	public String getPassword() {
+		return password.toString();
+	}
 	
-	
-	
+	@Override
+	public Collection<? extends GrantedAuthority> getAuthorities() {
+		// TODO Auto-generated method stub
+		println "in method getAuthorities in UserAccount"
+		return null;
+	}
+
+	@Override
+	public boolean isAccountNonExpired() {
+		// TODO Auto-generated method stub
+		return enabled;
+	}
+
+	@Override
+	public boolean isAccountNonLocked() {
+		// TODO Auto-generated method stub
+		return enabled;
+	}
+
+	@Override
+	public boolean isCredentialsNonExpired() {
+		// TODO Auto-generated method stub
+		return enabled;
+	}
 }

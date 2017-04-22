@@ -1,0 +1,25 @@
+<article th:fragment="start" id="start-fragment">
+	<h1 class="huge">Welcome</h1>
+	<h2 class="huge">Let's get started.</h2>
+	<form action="#" id="initial-data-form" th:action="@{/createprofile}"
+		method="post">
+		<p class="huge">
+			<label></label><input type="number" class="huge one-third-width"
+				th:field="*{human.bodyWeightInPounds}" name="bodyWeightInPounds" /> pounds | 
+			<span th:each="err : ${#fields.errors('human.bodyWeightInPounds')}" th:text="${err}" th:class="error-message"></span>
+			<label for="male">Man</label><input th:field="*{human.sex}"
+				type="radio" class="huge-radio" value="MALE" name="MALE" />
+				<label for="woman">Woman</label><input class="huge-radio"
+				th:field="*{human.sex}" type="radio" value="FEMALE" name="FEMALE" />
+				<span th:each="err : ${#fields.errors('human.sex')}" th:utext="${err}" th:class="error-message"></span>
+		</p>
+		<p>
+			<button type="submit" class="primary">Create my workout routine</button>
+		</p>
+	</form>
+	<br />
+	<br />
+	
+	<br />
+
+</article>

@@ -1,0 +1,12 @@
+<html>
+<th:block th:replace="fragments/head"></th:block>
+<body>
+	<th:block th:replace="fragments/header"></th:block>
+	<div id="main">
+		<th:block th:replace="fragments/navigation"></th:block>
+		<article th:include="fragments/currentusers">
+		</article>
+		<!-- <aside>Some other text here</aside> -->
+	</div>
+</body>
+</html>

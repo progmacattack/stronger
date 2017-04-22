@@ -31,10 +31,12 @@ class InitialSetupServiceTest {
 	
 	@Test
 	void testSetupHuman() {
-		Human humanMan = initialSetupService.setupHuman(new Human(sex: Sex.MALE))
-		assertTrue("Setup human weight should equal constant for male", humanMan.bodyWeightInPounds == (int)AverageHumanBodyweight.MaleInUsa.weightInPounds)
+		Human humanMan = new Human(sex: Sex.MALE)
+		initialSetupService.setupHuman(humanMan)
+		assertEquals("Setup human weight should equal constant for male", (int)AverageHumanBodyweight.MaleInUsa.weightInPounds, humanMan.bodyWeightInPounds)
 		
-		Human humanWoman = initialSetupService.setupHuman(new Human(sex: Sex.FEMALE))
+		Human humanWoman = new Human(sex: Sex.FEMALE)
+		initialSetupService.setupHuman(humanWoman)
 		assertTrue("Setup human weight should equal constant for female", humanWoman.bodyWeightInPounds == (int)AverageHumanBodyweight.FemaleInUsa.weightInPounds)
 		
 		List<ExerciseAbility> routine = humanMan.currentRoutine

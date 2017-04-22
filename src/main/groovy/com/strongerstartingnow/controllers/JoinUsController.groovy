@@ -5,7 +5,6 @@ import groovy.util.logging.Slf4j
 import javax.servlet.http.HttpSession
 import javax.validation.Valid
 
-import org.apache.commons.lang3.RandomStringUtils
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -17,29 +16,25 @@ import org.springframework.web.bind.annotation.SessionAttributes
 
 import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.UserAccount
-import com.strongerstartingnow.dao.UserAccountDao
 import com.strongerstartingnow.service.LoginService
 import com.strongerstartingnow.service.RoutineService
+import com.strongerstartingnow.webobjects.SaveRoutineInfo
 
-@SessionAttributes("human")
+@SessionAttributes("saveRoutineInfo")
 @Controller
 @Slf4j
 class JoinUsController {
-	
-	@Autowired
-	UserAccountDao userAccountDao
-	
 	@Autowired
 	RoutineService rs
+	
+	@Autowired
+	LoginService loginService
 	
 	@Autowired
 	UserAccount userAccount
 	
 	@Autowired
 	Human human
-	
-	@Autowired
-	LoginService loginService
 
 	@ModelAttribute("human")
 	public Human getHuman(HttpSession session) {
@@ -48,6 +43,15 @@ class JoinUsController {
 			human = new Human()
 		}
 		return human
+	}
+	
+	@ModelAttribute("saveRoutineInfo")
+	public SaveRoutineInfo saveRoutineInfo(HttpSession session) {
+		SaveRoutineInfo saveRoutineInfo = session.getAttribute("saveRoutineInfo")
+		if(saveRoutineInfo == null) {
+			saveRoutineInfo = new SaveRoutineInfo()
+		}
+		return saveRoutineInfo
 	}
 		
 	@GetMapping("/joinus")
@@ -67,50 +71,46 @@ class JoinUsController {
 	}
 	
 	@PostMapping("/joinus")
-	String checkUsernameAndJoin(@ModelAttribute("userAccount") @Valid UserAccount userAccount, BindingResult bindingResult, Model model) {	
+	String checkUsernameAndJoin(@ModelAttribute("userAccount") @Valid UserAccount userAccount,
+								@ModelAttribute("saveRoutineInfo") SaveRoutineInfo saveRoutineInfo,
+								BindingResult bindingResult, Model model) {	
 		if(bindingResult.hasErrors()) {
 			return "joinus"
-		}
-		println "u: " + userAccount.username + ", p: " + userAccount.password
+		}		
 		
-		Boolean accountCreated = false;
-		accountCreated = userAccountDao.create(userAccount);
+		String plainPassword = userAccount.password
 		
-		Human human = model["human"]
-		if(human != null) {
-			log.info("User " + userAccount.username + " has prepared routine, saving...")
-			rs.saveOrUpdateRoutine(human, userAccount)
-			log.info("Human weight: " + human.bodyWeightInPounds)
+		boolean accountCreated = false;
+		accountCreated = loginService.setupNewUser(userAccount);
+		
+		if(human != null) {			
+			rs.saveOrUpdateRoutine(saveRoutineInfo, userAccount)
 		}
 		
 		def credentials = [username: userAccount.username, password: null];
 		model.addAttribute("credentials", credentials);
 		
 		if(accountCreated) {
+			userAccount.password = plainPassword //set pw as plain text to allow auto-login
+			loginService.autoLoginUser(userAccount);
 			return "youvejoined"
-		} else {
-			return "error"
 		}
+		
+		return "error"
 	}
 	
 	@GetMapping("/joinus/random")
-	String assignRandomUsernamePasswordAndLogin(Model model) {
-		String randomUsername = loginService.generateRandomUsername()
-		while(userAccountDao.usernameExists(randomUsername)) { //loop to make sure username is unique
-			randomUsername = loginService.generateRandomUsername()
-		}
-		UserAccount userAccount = new UserAccount()
-		userAccount.setUsername(randomUsername)
-		String randomPassword = RandomStringUtils.random(8, true, true)
-		def credentials = [username: randomUsername, password: randomPassword]
-		model.addAttribute("credentials", credentials)
-		userAccount.setPassword(randomPassword)
-		Boolean accountCreated = false
-		accountCreated = userAccountDao.create(userAccount)
-		
-		if(accountCreated) {
-			return "youvejoined"
+	String assignRandomUsernamePasswordAndLogin(Model model, @ModelAttribute Human human) {
+		UserAccount ua = loginService.setupRandomUser();
+		def credentials = [username: ua.username, password: ua.password]
+		model.addAttribute("credentials", credentials) //we are willing to display password here
+													   //because we invented it. user does not know it		
+		log.debug("Pass: " + ua)
+		if(ua != null) {
+			loginService.autoLoginUser(ua);
+			return "youvejoined :: random"
 		} else {
+			log.info("There was a problem setting up the random username with random password")
 			return "error"
 		}
 	}

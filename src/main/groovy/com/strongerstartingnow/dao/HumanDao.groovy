@@ -11,28 +11,43 @@ import org.springframework.jdbc.core.JdbcTemplate
 import org.springframework.jdbc.core.RowMapper
 import org.springframework.stereotype.Component
 
+import com.strongerstartingnow.webobjects.SaveRoutineInfo
+
 @Component
 class HumanDao {
 	@Autowired
 	UserAccountDao userAccountDao
 	
 	@Autowired
+	ExerciseAbilityDao exerciseAbilityDao
+	
+	@Autowired
 	DataSource dataSource
 	
 	private JdbcTemplate jdbcTemplate
+	
 	@Autowired
 	HumanDao(JdbcTemplate jdbcTemplate) {
 		this.jdbcTemplate = jdbcTemplate;
 	}
 	
-	Boolean create(Human human) {
+	Boolean createHuman(SaveRoutineInfo saveRoutineInfo) {
+		boolean update = false;
 		String sql = "insert into human (bodyweight_in_pounds, bodyweight_in_kilograms, sex, useraccount_username) values (?,?,?,?)"
-		UserAccount ua = human.getUserAccount();
+		//see if user already has human
+		UserAccount ua = saveRoutineInfo.userAccount
+		Human human = saveRoutineInfo.human
+		Human humanFromDb = retrieve(ua)
+		if(humanFromDb != null) {
+			update = true;
+			sql = "UPDATE human SET bodyweight_in_pounds = ?, bodyweight_in_kilograms = ?, sex = ? WHERE useraccount_username = ?"
+		}
+		
 		//try to create user account
 		if(userAccountDao.userExists(ua)) {
 			try {
 				Boolean humanCreated = this.jdbcTemplate
-					.update(sql, human.bodyWeightInPounds, human.bodyWeightInKilograms, human.sex.value(), ua.username) > 0;
+					.update(sql, human.bodyWeightInPounds, human.bodyWeightInKilograms, human.sex, ua.username) > 0;
 			} catch(Exception e) {
 				return false;
 			}
@@ -41,29 +56,28 @@ class HumanDao {
 		return false;
 	}
 	
-	Boolean retrieve(UserAccount ua) {
+	/** Return Human object if there is one for the UserAccount. Otherwise, return null **/
+	Human retrieve(UserAccount ua) {
 		String username = ua.username;
-		String sql = "select * from human where useraccount_username = (?)"
+		String sql = "SELECT * FROM human WHERE useraccount_username = ?"
 		def params = [username] as Object[]
-		UserAccount userAccount = new UserAccount()
+		Human human = new Human();
 		try {
-			human = (Human) this.jdbcTemplate.quer
-			userAccount = (UserAccount)this.jdbcTemplate.queryForObject(sql, params, new RowMapper<UserAccount>() {
-				public UserAccount mapRow(ResultSet rs, int rowNum) throws SQLException {
-					println "row num is $rowNum"
-					userAccount.with {
-						name = rs.getString("name")
-						email = rs.getString("email")
-						username = rs.getString("username")
-						password = rs.getString("password")
-						enabled = rs.getBoolean("enabled")
+			human = (Human)jdbcTemplate.queryForObject(sql, params, new RowMapper<Human>() {
+				Human mapRow(ResultSet rs, int rowNum) throws SQLException {
+					human.with {
+						bodyWeightInPounds = Integer.parseInt(rs.getString("bodyweight_in_pounds"))
+						bodyWeightInKilograms = Integer.parseInt(rs.getString("bodyweight_in_kilograms"))
+						sex = (String)rs.getString("sex")
+						userAccount = (UserAccount)userAccountDao.getUserAccount(rs.getString("useraccount_username"))
 					}
-					return userAccount;
+					return human;
 				}
-			})
+			});	
 		} catch(EmptyResultDataAccessException e) {
 			e.printStackTrace()
+			return null
 		}
-		return userAccount;
+		return human;
 	}
 }

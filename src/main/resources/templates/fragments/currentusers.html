@@ -1,0 +1,5 @@
+<h3>Current users:</h3>
+<th:block th:each="row : ${userAccounts}">
+	<span th:text="${row.username}"></span>
+	<br />
+</th:block>
