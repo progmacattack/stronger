@@ -72,10 +72,10 @@ class JoinUsController {
 	
 	@PostMapping("/joinus")
 	String checkUsernameAndJoin(@ModelAttribute("userAccount") @Valid UserAccount userAccount,
-								@ModelAttribute("saveRoutineInfo") SaveRoutineInfo saveRoutineInfo,
-								BindingResult bindingResult, Model model) {	
+								BindingResult bindingResult, @ModelAttribute("saveRoutineInfo") SaveRoutineInfo saveRoutineInfo,
+								Model model) {	
 		if(bindingResult.hasErrors()) {
-			return "joinus"
+			return "joinus::createaccount"
 		}		
 		
 		String plainPassword = userAccount.password

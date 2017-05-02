@@ -14,6 +14,7 @@ import com.strongerstartingnow.dao.ExerciseAbility
 import com.strongerstartingnow.dao.Human
 import com.strongerstartingnow.dao.HumanAbilities
 import com.strongerstartingnow.service.InitialSetupService
+import com.strongerstartingnow.webobjects.SaveRoutineInfo
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
@@ -30,16 +31,19 @@ class InitialSetupServiceTest {
 	InitialSetupService initialSetupService
 	
 	@Test
-	void testSetupHuman() {
-		Human humanMan = new Human(sex: Sex.MALE)
-		initialSetupService.setupHuman(humanMan)
-		assertEquals("Setup human weight should equal constant for male", (int)AverageHumanBodyweight.MaleInUsa.weightInPounds, humanMan.bodyWeightInPounds)
+	void testSetupSaveRoutineInfo() {
+		SaveRoutineInfo saveRoutineInfo = new SaveRoutineInfo();
+		saveRoutineInfo.human = new Human(sex: Sex.MALE);
+		initialSetupService.setupSaveRoutineInfo(saveRoutineInfo)
+		assertEquals("Setup human weight should equal constant for male", (int)AverageHumanBodyweight.MaleInUsa.weightInPounds, saveRoutineInfo.human.bodyWeightInPounds)
 		
-		Human humanWoman = new Human(sex: Sex.FEMALE)
-		initialSetupService.setupHuman(humanWoman)
-		assertTrue("Setup human weight should equal constant for female", humanWoman.bodyWeightInPounds == (int)AverageHumanBodyweight.FemaleInUsa.weightInPounds)
+		SaveRoutineInfo saveRoutineInfoWoman = new SaveRoutineInfo();
+		saveRoutineInfoWoman.human = new Human(sex: Sex.FEMALE)
+		initialSetupService.setupSaveRoutineInfo(saveRoutineInfoWoman)
+		println "woman weight: $saveRoutineInfoWoman.human.bodyWeightInPounds"
+		assertTrue("Setup human weight should equal constant for female", saveRoutineInfoWoman.human.bodyWeightInPounds == (int)AverageHumanBodyweight.FemaleInUsa.weightInPounds)
 		
-		List<ExerciseAbility> routine = humanMan.currentRoutine
+		List<ExerciseAbility> routine = saveRoutineInfo.currentExercises;
 		assertTrue("Some abilities are set", routine != null)
 		
 		for(ExerciseAbility ea: routine) {

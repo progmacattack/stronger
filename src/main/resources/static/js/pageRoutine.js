@@ -70,12 +70,18 @@ var switchWeek = function(elm) {
 	var messageElm = document.getElementById("message-alert");
 
 	if(weekNumber !== "1" && weekNumber !== "5") {
-		messageElm.textContent = "The weight stays the same from week-to-week, but the reps go up. The weight increases after each cycle.";
+		messageElm.textContent = "The weight stays the same from week-to-week," +
+				" but the reps go up. The weight increases after each cycle.";
 	} else if(weekNumber === "5") {
-		messageElm.textContent = "Week 5 is test week! On Day A, go all out and try to get 12 reps. If you can, great! If not, hold the weight" +
-				" steady for that exercise in the next Cycle. After this week, go onto the next Cycle.";
+		messageElm.textContent = "Week 5 is test week! On Day A, go all out" +
+				" and try to get 12 reps. If you can, great! If not, hold the" +
+				" weight steady for that exercise in the next Cycle. After this" +
+				" week, go onto the next Cycle.";
 	} else {
-		messageElm.textContent = "This is your recommended routine. However, you can customize the starting weight by adjusting the sliders.";
+		messageElm.textContent = "This is your recommended routine. Save your " +
+				"routine as you progress through weeks and cycles and we will " +
+				"track where you're at. If necessary, you can customize the " +
+				"starting weight by adjusting the sliders.";
 	}
 }
 
@@ -95,9 +101,12 @@ var displaySliderNumbers = function(elementId, className, dataElementName) {
 	}			
 }
 
-var replaceMainContent = function(html) {
-	var element = document.getElementById("initial-routine");
-	
+/* Replace content of the element whose id is the second parameter with the
+ * html code defined in the first parameter. This function is useful if we
+ * have html that is in text form rather than a js element.
+ */
+var replaceContent = function(html, elementId) {
+	var element = document.getElementById(elementId);
 	var div = document.createElement("div");
 	div.innerHTML = html;
 	var outerElement = div.firstElementChild;
@@ -134,7 +143,7 @@ var renderCycle = function(element, url) {
 	request.onload = function() {
 	  if (request.status >= 200 && request.status < 400) {
 	    var data = request.responseText;
-	    replaceMainContent(data);
+	    replaceContent(data, "initial-routine");
 	    resetWeeks();
 	  } else {
 	  }
@@ -158,21 +167,25 @@ var saveRoutine = function(elm) {
 	}
 }
 
-var saveAfterCreate = function() {
-	var saveButtonElm = document.getElementById("save-button");
-	saveButtonElm.textContent = "Save";
- 	saveButtonElm.dataset["alsoCreateAccount"] = false;
- 	saveRoutine(saveButtonElm);
+var saveAfterCreate = function(request) {
+	replaceContent(request.responseText, "new-user-article");
+	if(request.responseText.indexOf("error-message") > 0) {
+		console.log("errors are present");
+	} else { //no errors
+		var saveButtonElm = document.getElementById("save-button");
+		saveButtonElm.textContent = "Save";
+	 	saveButtonElm.dataset["alsoCreateAccount"] = false;
+	 	saveRoutine(saveButtonElm);
+	 	console.log("Response: " + request.responseText);
+	}
 }
 
 var createAccount = function() {
 	var newUserForm = document.getElementById("new-user-form");
- 	console.log("new-user-form exists");
  	AJAXSubmit(newUserForm, saveAfterCreate);			 
 }
 
 var handleResponse = function(request) {
-	console.log("callback success!" + request.responseText);
 	 if(request.status >= 200 && request.status <= 400) {
 		 console.log("request was successful. status: " + request.status);
 		 var elm = document.getElementById("save-status");

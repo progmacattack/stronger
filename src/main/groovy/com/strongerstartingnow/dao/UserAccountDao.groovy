@@ -102,7 +102,7 @@ class UserAccountDao {
 	}
 	
 	UserAccount getUserAccount(String usernameProvided) throws UsernameNotFoundException {
-		String sql = "select * from userAccount where username = (?)"
+		String sql = "select * from useraccount where username = (?)"
 		def params = [usernameProvided] as Object[]
 		UserAccount userAccount = new UserAccount()
 		try {

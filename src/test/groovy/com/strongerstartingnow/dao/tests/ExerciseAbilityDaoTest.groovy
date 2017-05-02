@@ -8,6 +8,7 @@ import org.junit.Test
 import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
@@ -76,7 +77,12 @@ class ExerciseAbilityDaoTest {
 		exerciseDao.deleteExercise(exCreated)
 		assert null == exerciseDao.getExerciseById(exCreated.id)
 		userAccountDao.delete(user)
-		assert userAccountDao.getUserAccount(user.username).username == null
+	
+		try {
+			userAccountDao.getUserAccount(user.username)
+		} catch(UsernameNotFoundException ex) {
+			assert true
+		}
 	}
 	
 	@Test
@@ -97,8 +103,12 @@ class ExerciseAbilityDaoTest {
 		assert eaReturned != null
 		exerciseDao.deleteExercise(exCreated)
 		assert null == exerciseDao.getExerciseById(exCreated.id)
-		userAccountDao.delete(user)
-		assert userAccountDao.getUserAccount(user.username).username == null
+		userAccountDao.delete(user)		
+		try {
+			userAccountDao.getUserAccount(user.username)
+		} catch(UsernameNotFoundException ex) {
+			assert true
+		}
 	}
 	
 	@Test
@@ -165,11 +175,19 @@ class ExerciseAbilityDaoTest {
 		
 		assert userAccountDao.getUserAccount(user.username).username != null 
 		userAccountDao.delete(user)
-		assert userAccountDao.getUserAccount(user.username).username == null
+		try {
+			userAccountDao.getUserAccount(user.username)
+		} catch(UsernameNotFoundException ex) {
+			assert true
+		}
 		
 		assert userAccountDao.getUserAccount(user2.username).username != null 
 		userAccountDao.delete(user2)
-		assert userAccountDao.getUserAccount(user2.username).username == null
+				try {
+			userAccountDao.getUserAccount(user2.username)
+		} catch(UsernameNotFoundException ex) {
+			assert true
+		}
 	}
 
 }

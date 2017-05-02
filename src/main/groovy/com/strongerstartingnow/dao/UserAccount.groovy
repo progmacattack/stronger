@@ -3,18 +3,21 @@ import groovy.transform.Canonical
 
 import java.security.Principal
 import java.util.Collection;
+import javax.validation.constraints.Size;
 
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails
 import org.springframework.stereotype.Component
 import com.strongerstartingnow.validators.ValidUsername
+
 @Canonical
 @Component
 class UserAccount implements Principal, UserDetails {
 	@ValidUsername
 	String username
 	def name
-	def password
+	@Size(min=2, max=30)
+	String password
 	def email
 	boolean enabled = true
 	UserAccountRole userAccountRole

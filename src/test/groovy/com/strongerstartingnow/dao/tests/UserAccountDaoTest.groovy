@@ -7,6 +7,7 @@ import org.junit.runner.RunWith
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.boot.test.context.SpringBootTest
 import org.springframework.boot.test.mock.mockito.*
+import org.springframework.security.core.userdetails.UsernameNotFoundException
 import org.springframework.test.context.ActiveProfiles
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner
 
@@ -80,8 +81,11 @@ class UserAccountDaoTest {
 	@Test
 	void testGetNonExistingUserAccount() {
 		println "getting user account with name that doesn't exist..."
-		UserAccount retrievedUser = userAccountDao.getUserAccount("fakeusername")
-		assertNotEquals("Empty user should be returned", retrievedUser, null)
+		try {
+			UserAccount retrievedUser = userAccountDao.getUserAccount("fakeusername")
+		} catch(UsernameNotFoundException ex) {
+			assert true; //should throw username not found exception
+		}
 	}
 	
 	@Test
