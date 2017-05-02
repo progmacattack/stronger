@@ -37,7 +37,7 @@ class InitialSetupService {
 		for(ex in Exercise.DefaultExercises.values()) {
 			Exercise exrcse = new Exercise([name: ex.sqlName])
 			ExerciseAbility ea = new ExerciseAbility([exercise: exrcse])
-			if(human.sex == Sex.FEMALE) {
+			if(human.sex == Sex.FEMALE.toString()) {
 				if(human.bodyWeightInPounds <= 0) {
 					human.bodyWeightInPounds = AverageHumanBodyweight.FemaleInUsa.inPounds()
 				}							

@@ -3,8 +3,8 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.strongerstartingnow.www</groupId>
-	<artifactId>strongerstartingnow-www</artifactId>
+	<groupId>com.strongerstartingnow</groupId>
+	<artifactId>strongerstartingnow</artifactId>
 	<version>0.1</version>
 	<packaging>jar</packaging>
 
@@ -74,9 +74,8 @@
 			<version>3.5</version>
 		</dependency>
 		<dependency>
-			<groupId>com.stronger</groupId>
-			<artifactId>MavenUtility</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<groupId>org.springframework.boot</groupId>
+			<artifactId>spring-boot-loader</artifactId>
 		</dependency>
 	</dependencies>
 

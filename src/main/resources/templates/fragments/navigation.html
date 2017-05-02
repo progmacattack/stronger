@@ -2,9 +2,9 @@
 	<th:block th:with="username=${#httpServletRequest.remoteUser}">
 		<ul class="col-large-small-1-of-2">
 			<li><a href="/">Home</a></li>
-			<li th:if="${username} == null">
+<!-- 			<li th:if="${username} == null">
 				<a th:href="@{/joinus}">Join</a>
-			</li>
+			</li> -->
 <!-- 			<li th:if="${username} != null">
 				<a th:href="@{/currentusers}">Current users</a>
 			</li> -->

@@ -75,7 +75,7 @@ class HumanDao {
 				}
 			});	
 		} catch(EmptyResultDataAccessException e) {
-			e.printStackTrace()
+			e.getMessage();
 			return null
 		}
 		return human;

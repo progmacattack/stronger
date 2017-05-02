@@ -7,6 +7,7 @@ body {
 	font-size: 20px; margin : 0px 20px 20px 20px;
 	background-image: url("/assets/sunny-area-squat-stock-reduced.jpg");
 	margin: 0px 20px 20px 20px;
+	background-size: cover;
 }
 
 header, footer, article, aside {
@@ -59,7 +60,7 @@ h1 {
 h1.huge {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	font-size: 100px;
+	font-size: 60px;
 	color: antiquewhite;
 }
 
@@ -72,12 +73,12 @@ h2 {
 h2.huge {
 	margin-top: 0px;
 	margin-bottom: 0px;
-	font-size: 80px;
+	font-size: 40px;
 	color: azure;
 }
 
 p.huge, input.huge {
-	font-size: 40px;
+	font-size: 20px;
 }
 
 input.huge {
@@ -106,8 +107,8 @@ input.huge {
 }
 
 input.huge-radio {
-	height: 30px;
-	width: 30px;
+	height: 15px;
+	width: 15px;
 }
 
 .inline-h2 {
@@ -128,14 +129,22 @@ button.primary, button.secondary, input[type="submit"].secondary, input[type="su
 }
 
 button.primary {
-	padding: 15px;
-	font-size: 40px;
+	padding: 10px;
+	font-size: 25px;
 	border: 0px;
 	text-shadow: cadetblue;
 	width: 100%;
-	color: seagreen;
+	color: white;
 	font-weight: bold;
-	background-color: lightgreen;
+	background-color: #82d882;
+}
+
+button.primary:hover {
+	background-color: #75c275;
+}
+
+button.primary:active {
+	background-color: #5b975b;
 }
 
 button.secondary, input.secondary {
@@ -165,7 +174,7 @@ ul.horizontal-list>li {
 	display: inline-block;
 	color: #aaa;
 	margin-right: 9px;
-	font-size: 2em;
+	font-size: 1.5em;
 }
 
 ul.horizontal-list>li.active, ul.horizontal-list>li:hover {
@@ -178,6 +187,7 @@ ul.horizontal-list>li.active, ul.horizontal-list>li:hover {
 	color: red;
 	font-size: small;
 	margin-bottom: 3px;
+	position: absolute;
 }
 
 input[type=text], input[type=password] {
@@ -204,6 +214,10 @@ input[name=submit] {
 
 #initial-routine>input+.current-sets::after {
 	content: ' sets';
+}
+
+#initial-routine input.current-reps {
+	background-color: transparent;
 }
 
 #initial-routine .exercise-block {
@@ -284,7 +298,7 @@ input.unstyled-text-input {
 }
 
 .huge-top-margin {
-	margin-top: 60px;
+	margin-top: 40px;
 }
 
 .modest-top-margin {

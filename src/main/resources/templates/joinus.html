@@ -10,10 +10,11 @@
 	<th:block th:replace="fragments/header"></th:block>
 	<div id="main">
 		<th:block th:replace="fragments/navigation"></th:block>
-		<article th:fragment="createaccount">
+		<article th:fragment="createaccount" id="new-user-article">
 			<form class="newUserForm" id="new-user-form" th:object="${userAccount}" method="POST" th:action="@{/joinus}" >
 			<label>Choose Username:</label> <input name="username" type="text" />
 			<span class="error-message" th:errors="*{username}">Error placeholder</span>
+			<span class="error-message" th:errors="*{password}">Error placeholder</span>
 			<label>Set password:</label><input name="password" type="password" /><br />
 			<input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
 			<!-- <input name="submit" value="Begin" type="submit" /> -->
