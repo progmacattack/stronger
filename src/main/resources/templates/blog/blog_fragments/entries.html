@@ -1,0 +1,17 @@
+
+<article th:each="blogPost, stat: ${allBlogPosts}">
+ <div class="blog-post-content" th:text="${blogPost.getContent()}" />
+ <div class="blog-post-date" util:blogdate="${blogPost.getDateTime()}" />
+ <div class="blog-post-edit-options" th:if="${blogEditor}">
+	<form th:action="@{/blogdeletepost}" method="post">
+  		<input type="hidden" name="blogPostId" th:value="${blogPost.blogPostId}" />  		
+ 		<input type="submit" value="Delete" />
+ 	</form>
+ 	<form th:action="@{/blogeditpost}" method="post" th:object="${allBlogPosts[__${stat.index}__]}">
+  		<input type="hidden" name="blogPostId" th:value="*{blogPostId}" />
+  		<input type="hidden" name="content" th:value="*{content}" />
+  		<input type="hidden" name="dateTime" th:value="*{dateTime}" />  
+ 		<input type="submit" value="Edit" />
+ 	</form>
+ </div>
+</article>

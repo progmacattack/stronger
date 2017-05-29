@@ -17,6 +17,7 @@ public class UtilDialect extends AbstractDialect {
 	public Set<IProcessor> getProcessors() {
 		final Set<IProcessor> processors = new HashSet<>();
 		processors.add(new RoundToFive());
+		processors.add(new BlogDate());
 		return processors;
 	}
 

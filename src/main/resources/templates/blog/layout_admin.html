@@ -1,0 +1,11 @@
+<html>
+<th:block th:replace="/fragments/head"></th:block>
+<body>
+	<th:block th:replace="/fragments/header"></th:block>
+	<div id="main">
+		<th:block th:replace="/fragments/navigation"></th:block>
+		<article th:include="/blog/blog_fragments/add_entry"></article>
+		<article th:if="${#httpServletRequest.remoteUser == null}" class="box-in" th:include="fragments/login"></article>
+	</div>
+</body>
+</html>

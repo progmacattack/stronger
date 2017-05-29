@@ -38,7 +38,12 @@ class UserAccountRoleDao {
 		} else {
 		  return new UserAccountRole();
 		};
-		
+	}
+	
+	boolean update(UserAccount userAccount, RoleEnum roleEnum) {
+		def sql = "UPDATE useraccount_role SET role = ? WHERE username = ?"
+		def params = [roleEnum.sqlValue, userAccount.username] as Object[]
+		return jdbcTemplate.update(sql, params) > 0;
 	}
 	
 	Boolean delete(UserAccount userAccount) {

@@ -21,6 +21,8 @@ class EnglishWordDao {
 	@Autowired
 	DataSource dataSource;
 
+	List<EnglishWord> allWords;
+	
 	class Params {
 		Integer length
 		String regex
@@ -30,18 +32,37 @@ class EnglishWordDao {
 	 * @return EnglishWord object representing word
 	 */
 	EnglishWord getRandomWord() {
-		Params params = new Params()
-		params.setRegex(StringOrLetterUtilities.randomLetterRegex(2))
-		String regex = params.regex
-		String sqlToUse = "select word from commonenglishwords where word regexp ?.regex limit 450"
+		EnglishWord word = ListUtilities.getOneFromList(allWords);
+		return word;
+	}
+	
+	EnglishWord getRandomWordWithDbCall() {
+		 Params params = new Params()
+		 params.setRegex(StringOrLetterUtilities.randomLetterRegex(2))
+		 String regex = params.regex
+		 String sqlToUse = "select word from commonenglishwords where word regexp ?.regex limit 450"
+		 def sql = new Sql(dataSource)
+		 def rows = sql.rows(sqlToUse, params)
+		 def list = new ArrayList<EnglishWord>()
+		 rows.forEach {
+			 list.add(it)
+		 }
+		 def word = ListUtilities.getOneFromList(list)
+		 return word; 
+	}
+	
+	/** Setup list containing all english words from common english words
+	 * table in db. Should run at application startup
+	 * 
+	 */
+	void buildAllWords() {
+		allWords = new ArrayList<>();
+		String sqlToUse = "select * from commonenglishwords"
 		def sql = new Sql(dataSource)
-		def rows = sql.rows(sqlToUse, params)
-		def list = new ArrayList<EnglishWord>()
+		def rows = sql.rows(sqlToUse)
 		rows.forEach {
-			list.add(it)
+			allWords.add(it)
 		}
-		def word = ListUtilities.getOneFromList(list)
-		return word
 	}
 	
 	/** Method to get a random word based on length

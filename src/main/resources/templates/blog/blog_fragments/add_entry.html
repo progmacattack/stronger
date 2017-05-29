@@ -1,0 +1,7 @@
+<h3>Add entry to blog</h3>
+<form th:action="@{/blogsavepost}" th:object="${blogPost}" method="POST">
+<input type="hidden" name="blogPostId" th:value="*{blogPostId}" />
+<textarea rows="20" cols="100" th:field="*{content}"></textarea>
+<br />
+<input type="submit" value="Post to Blog"/>
+</form>
