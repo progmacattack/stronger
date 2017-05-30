@@ -1,6 +1,6 @@
 
-<article th:each="blogPost, stat: ${allBlogPosts}">
- <div class="blog-post-content" th:text="${blogPost.getContent()}" />
+<article th:each="blogPost, stat: ${allBlogPosts}" class="blog-post">
+ <div class="blog-post-content" th:utext="${blogPost.getContent()}" />
  <div class="blog-post-date" util:blogdate="${blogPost.getDateTime()}" />
  <div class="blog-post-edit-options" th:if="${blogEditor}">
 	<form th:action="@{/blogdeletepost}" method="post">

@@ -11,7 +11,6 @@ import java.util.Map;
 
 import javax.sql.DataSource;
 
-import org.junit.Before;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.RowMapper;
@@ -30,7 +29,6 @@ public class BlogPostDao {
 	
 	private NamedParameterJdbcTemplate jdbc;
 	
-	@Before
 	private void setupJdbc() {
 		if(this.jdbc == null) {
 			this.jdbc = new NamedParameterJdbcTemplate(dataSource);

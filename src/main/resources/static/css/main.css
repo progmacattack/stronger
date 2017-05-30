@@ -304,3 +304,10 @@ input.unstyled-text-input {
 .modest-top-margin {
 	margin-top: 20px;
 }
+
+article.blog-post {
+	background-color: antiquewhite;
+	color: #333333;
+	padding: 20px;
+	margin: 20px; 
+}

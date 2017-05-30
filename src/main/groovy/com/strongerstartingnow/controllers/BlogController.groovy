@@ -63,7 +63,7 @@ class BlogController {
 	@GetMapping("/blog")
 	public ModelAndView blog(Principal principal) {
 		Boolean blogEditor = isAdmin(principal);
-		ModelAndView m = new ModelAndView("/blog/layout_blog_main");
+		ModelAndView m = new ModelAndView("blog/layout_blog_main");
 		m.addObject("blogEditor", blogEditor);
 		return m;
 	}
@@ -88,7 +88,7 @@ class BlogController {
 		} else {
 			log.info("You need to be an admin to add a blog post. Your post content: " + blogPost.getContent() + " will be discarded.");
 		}
-		return "/blog/layout_blog_main";
+		return "blog/layout_blog_main";
 	}
 	
 	@PostMapping("/blogeditpost")
@@ -122,7 +122,7 @@ class BlogController {
 		} else {
 			log.info("You need to be an admin to delete a blog post.");
 		}
-		return "/blog/layout_blog_main";
+		return "blog/layout_blog_main";
 	}
 	
 	private boolean isAdmin(Principal principal) {
